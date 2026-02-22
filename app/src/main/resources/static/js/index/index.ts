@@ -1,21 +1,33 @@
+// @ts-ignore
+import {Client} from '@stomp/stompjs';
+// @ts-ignore
+import SockJS from 'sockjs-client'
+
 document.addEventListener("DOMContentLoaded", generateListOfGames)
 document.querySelector('#create-game')?.addEventListener('click', create_game)
 
-async function generateListOfGames() {
-    try {
-        const response = await fetch('/api/list-of-games', {
-            method: 'GET'
+const WEBSOCKET_URL = 'http://localhost/ws'
+
+class WebSocketService {
+    private client: Client
+
+    constructor() {
+        this.client = new Client({
+            debug: (msg: string) => {
+                console.log(msg)
+            }
         })
-        if (!response.ok) {
-            console.error(response.statusText)
-        }
-        const data: Array<{ [gameId: string]: object }> = await response.json()
-        for (const [gameId, game] of Object.entries(data)) {
-            addGameToListOfGames(gameId, (game['players'] as []).length, game['number-of-players'] as unknown as number)
-        }
-    } catch (error) {
-        console.error(error)
     }
+
+    public activate() {
+        this.client.onConnect = (frame: any) => {
+            console.log(frame)
+        }
+    }
+}
+
+async function generateListOfGames() {
+    new WebSocketService().activate()
 }
 
 function addGameToListOfGames(id: string, players: number, numberOfPlayers: number) {
