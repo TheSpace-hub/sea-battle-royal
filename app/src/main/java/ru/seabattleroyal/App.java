@@ -12,7 +12,6 @@ import java.util.Map;
 
 @SpringBootApplication
 @RestController
-@RequestMapping("/api")
 public class App {
 
     private final GameRepository repository;
@@ -27,7 +26,7 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
-    @PostMapping("/create-game")
+    @PostMapping("/api/create-game")
     public Map<String, String> createGame(@RequestBody Map<String, Integer> body) {
         int numberOfPlayers = body.get("number-of-players");
         if (numberOfPlayers > 5 || numberOfPlayers < 2)
@@ -40,7 +39,7 @@ public class App {
         return Map.of("id", gameId);
     }
 
-    @GetMapping("/list-of-games")
+    @GetMapping("/api/list-of-games")
     public String getGames() {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(repository.getGames());
