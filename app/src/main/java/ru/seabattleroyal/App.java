@@ -24,7 +24,11 @@ public class App {
 
     @PostMapping("/create-game")
     public Map<String, String> createGame(@RequestBody Map<String, Integer> body) {
-        String gameId = repository.createGame();
+        int numberOfPlayers = body.get("number-of-players");
+        if (numberOfPlayers > 5 || numberOfPlayers < 2)
+            return Map.of("error", "Invalid number of players");
+
+        String gameId = repository.createGame(numberOfPlayers);
         return Map.of("id", gameId);
     }
 

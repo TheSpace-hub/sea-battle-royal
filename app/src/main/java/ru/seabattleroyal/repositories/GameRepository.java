@@ -5,7 +5,7 @@ import ru.seabattleroyal.game.Game;
 import java.util.Map;
 
 public interface GameRepository {
-    String createGame();
+    String createGame(int numberOfPlayers);
 
     void deleteGame(String gameId);
 

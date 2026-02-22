@@ -16,8 +16,8 @@ public class InMemoryGameRepository implements GameRepository {
     }
 
     @Override
-    public String createGame() {
-        Game game = new Game();
+    public String createGame(int numberOfPlayers) {
+        Game game = new Game(numberOfPlayers);
         String gameId = Game.generateId();
         games.put(gameId, game);
         return gameId;

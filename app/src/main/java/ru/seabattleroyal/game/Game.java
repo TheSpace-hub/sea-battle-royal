@@ -14,8 +14,10 @@ public class Game {
     private static final Random random = new Random();
 
     private final Set<Player> players = new HashSet<>();
+    private final int numberOfPlayers;
 
-    public Game() {
+    public Game(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     public void addPlayer(Player player) {
