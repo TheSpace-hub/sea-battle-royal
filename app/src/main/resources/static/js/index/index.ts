@@ -25,6 +25,10 @@ class WebSocketService {
             console.log(frame)
         }
 
+        this.client.subscribe('/topic/new-game', () => {
+            console.log("New game added!")
+        })
+
         this.client.activate()
     }
 }
