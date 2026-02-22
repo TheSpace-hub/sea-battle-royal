@@ -2,14 +2,14 @@ package ru.seabattleroyal.repositories;
 
 import ru.seabattleroyal.game.Game;
 
-import java.util.List;
+import java.util.Map;
 
 public interface GameRepository {
-    int createGame();
+    String createGame();
 
     void deleteGame(String gameId);
 
     Game getGame(String gameId);
 
-    List<Integer> getGames();
+    Map<String, Game> getGames();
 }

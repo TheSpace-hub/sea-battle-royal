@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import ru.seabattleroyal.game.Game;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -17,24 +16,24 @@ public class InMemoryGameRepository implements GameRepository {
     }
 
     @Override
-    public int createGame() {
-
-        return 0;
+    public String createGame() {
+        String gameId = Game.generateId();
+        return gameId;
     }
 
     @Override
     public void deleteGame(String gameId) {
-
+        games.remove(gameId);
     }
 
     @Override
     public Game getGame(String gameId) {
-        return null;
+        return games.get(gameId);
     }
 
     @Override
-    public List<Integer> getGames() {
-        return List.of();
+    public Map<String, Game> getGames() {
+        return games;
     }
 
 }
