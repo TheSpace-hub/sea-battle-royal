@@ -3,7 +3,6 @@ import {Client} from '@stomp/stompjs';
 // @ts-ignore
 import SockJS from 'sockjs-client'
 
-document.addEventListener("DOMContentLoaded", generateListOfGames)
 document.querySelector('#create-game')?.addEventListener('click', create_game)
 
 const WEBSOCKET_URL = 'http://localhost:8080/websocket'
@@ -23,18 +22,39 @@ class WebSocketService {
     public activate() {
         this.client.onConnect = (frame: any) => {
             console.log(frame)
+            this.client.subscribe('/topic/updating-the-list-of-games', () => {
+                generateListOfGames().then()
+            })
         }
-
-        this.client.subscribe('/topic/new-game', () => {
-            console.log("New game added!")
-        })
 
         this.client.activate()
     }
 }
 
-async function generateListOfGames() {
+document.addEventListener("DOMContentLoaded", () => {
     new WebSocketService().activate()
+})
+
+async function generateListOfGames() {
+    try {
+        const response = await fetch('/api/list-of-games', {
+            method: 'GET'
+        })
+        if (!response.ok) {
+            console.error(response.statusText)
+        }
+        const data: Array<{ [gameId: string]: object }> = await response.json()
+
+        const listOfGames = document.querySelector('#list-of-games')
+        while (listOfGames?.firstChild) {
+            listOfGames.removeChild(listOfGames?.firstChild)
+        }
+        for (const [gameId, game] of Object.entries(data)) {
+            addGameToListOfGames(gameId, (game['players'] as []).length, game['number-of-players'] as unknown as number)
+        }
+    } catch (error) {
+        console.error(error)
+    }
 }
 
 function addGameToListOfGames(id: string, players: number, numberOfPlayers: number) {

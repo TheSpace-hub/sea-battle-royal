@@ -2,6 +2,7 @@ package ru.seabattleroyal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import ru.seabattleroyal.game.Game;
 import ru.seabattleroyal.repositories.GameRepository;
@@ -15,9 +16,11 @@ import java.util.Map;
 public class App {
 
     private final GameRepository repository;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public App(GameRepository repository) {
+    public App(GameRepository repository, SimpMessagingTemplate messagingTemplate) {
         this.repository = repository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public static void main(String[] args) {
@@ -31,6 +34,9 @@ public class App {
             return Map.of("error", "Invalid number of players");
 
         String gameId = repository.createGame(numberOfPlayers);
+
+        messagingTemplate.convertAndSend("/topic/updating-the-list-of-games", "");
+
         return Map.of("id", gameId);
     }
 
