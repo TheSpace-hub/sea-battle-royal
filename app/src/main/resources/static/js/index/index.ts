@@ -84,6 +84,8 @@ function createItem(id: string, players: number, numberOfPlayers: number): strin
 
 async function create_game() {
     const numberOfPlayers = (document.querySelector('#players-count') as HTMLSelectElement).value
+    if (!canJoin())
+        return
 
     const response = await fetch('/api/create-game', {
         method: 'POST',
