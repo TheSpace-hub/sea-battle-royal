@@ -16,4 +16,6 @@ async function create_game() {
     if (!response.ok) {
         console.error(response.statusText)
     }
+
+    console.log((await response.json())['id'])
 }
