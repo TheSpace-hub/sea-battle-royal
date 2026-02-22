@@ -59,7 +59,7 @@ async function generateListOfGames() {
 function addGameToListOfGames(id: string, players: number, numberOfPlayers: number) {
     document.querySelector('#list-of-games')?.insertAdjacentHTML('beforeend', createItem(id, players, numberOfPlayers))
     document.querySelector(`#game-${id}`)?.addEventListener('click', () => {
-        console.log('open game ' + id)
+        joinInToGame(id)
     })
 }
 
@@ -89,5 +89,25 @@ async function create_game() {
         console.error(response.statusText)
     }
 
-    console.log((await response.json())['id'])
+    joinInToGame((await response.json())['id'])
+}
+
+function joinInToGame(id: string) {
+    const username: string = (document.querySelector('#username') as HTMLInputElement).value
+    if (id === '')
+        return false
+    if (canJoin())
+        window.location.href = `/game/${id}?username=${username}`
+}
+
+function canJoin(): boolean {
+    const username = (document.querySelector('#username') as HTMLInputElement).value
+    if (username === '') {
+        const usernameError = document.querySelector('#write-username-error')
+        if (usernameError)
+            usernameError.innerHTML = 'Чтобы зайти в игру, введите позывной!'
+        return false
+    }
+
+    return true
 }
