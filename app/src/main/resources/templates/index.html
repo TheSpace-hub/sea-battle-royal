@@ -84,14 +84,19 @@
 <script type="importmap">
     {
         "imports": {
-            "@stomp/stompjs": "https://esm.sh/@stomp/stompjs@7.3.0",
-            "sockjs-client": "https://esm.sh/sockjs-client@1.6.1"
+            "@stomp/stompjs": "http://localhost:8080/npm/@stomp/stompjs@7.3.0",
+            "sockjs-client": "http://localhost:8080/npm/sockjs-client@1.6.1"
         }
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+<!--&lt;!&ndash; SockJS (глобальная переменная SockJS) &ndash;&gt;-->
+<!--<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>-->
+
+<!--&lt;!&ndash; STOMP.js (глобальная переменная Stomp) &ndash;&gt;-->
+<!--<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.3.0/bundles/stomp.umd.min.js"></script>-->
 <script type="module" src="/js/index/index.js"></script>
 </body>
 </html>
