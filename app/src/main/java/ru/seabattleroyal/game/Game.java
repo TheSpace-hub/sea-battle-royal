@@ -1,5 +1,6 @@
 package ru.seabattleroyal.game;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ public class Game {
     private static final Random random = new Random();
 
     private final Set<Player> players = new HashSet<>();
+    @JsonProperty("number-of-players")
     private final int numberOfPlayers;
 
     public Game(int numberOfPlayers) {

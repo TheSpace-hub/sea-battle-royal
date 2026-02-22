@@ -3,7 +3,9 @@ package ru.seabattleroyal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
+import ru.seabattleroyal.game.Game;
 import ru.seabattleroyal.repositories.GameRepository;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
@@ -30,6 +32,12 @@ public class App {
 
         String gameId = repository.createGame(numberOfPlayers);
         return Map.of("id", gameId);
+    }
+
+    @GetMapping("/list-of-games")
+    public String getGames() {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(repository.getGames());
     }
 
 }
