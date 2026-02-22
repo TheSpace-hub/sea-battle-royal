@@ -21,7 +21,6 @@ class WebSocketService {
 
     public activate() {
         this.client.onConnect = (frame: any) => {
-            console.log(frame)
             this.client.subscribe('/topic/updating-the-list-of-games', () => {
                 generateListOfGames().then()
             })
