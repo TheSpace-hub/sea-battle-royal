@@ -2,7 +2,7 @@ package ru.seabattleroyal.game;
 
 public class Field {
 
-    private CellType[][] field;
+    private final CellType[][] field;
 
     public Field(CellType defaultField) {
         field = new CellType[10][10];
