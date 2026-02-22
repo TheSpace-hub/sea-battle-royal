@@ -1,8 +1,7 @@
 document.querySelector('#create-game')?.addEventListener('click', create_game)
 
 async function create_game() {
-    const playersCount = (document.querySelector('#players-count') as HTMLSelectElement).value
-    console.log(playersCount)
+    const numberOfPlayers = (document.querySelector('#players-count') as HTMLSelectElement).value
 
     const response = await fetch('/api/create-game', {
         method: 'POST',
@@ -10,7 +9,7 @@ async function create_game() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            'players-count': playersCount
+            'number-of-players': numberOfPlayers
         })
     })
 
