@@ -59,6 +59,9 @@ async function generateListOfGames() {
 
 function addGameToListOfGames(id: string, players: number, numberOfPlayers: number) {
     document.querySelector('#list-of-games')?.insertAdjacentHTML('beforeend', createItem(id, players, numberOfPlayers))
+    document.querySelector(`#game-${id}`)?.addEventListener('click', () => {
+        console.log('open game ' + id)
+    })
 }
 
 function createItem(id: string, players: number, numberOfPlayers: number): string {
