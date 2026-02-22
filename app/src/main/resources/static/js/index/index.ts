@@ -6,13 +6,14 @@ import SockJS from 'sockjs-client'
 document.addEventListener("DOMContentLoaded", generateListOfGames)
 document.querySelector('#create-game')?.addEventListener('click', create_game)
 
-const WEBSOCKET_URL = 'http://localhost/ws'
+const WEBSOCKET_URL = 'http://localhost:8080/websocket'
 
 class WebSocketService {
     private client: Client
 
     constructor() {
         this.client = new Client({
+            webSocketFactory: () => new SockJS(WEBSOCKET_URL),
             debug: (msg: string) => {
                 console.log(msg)
             }
@@ -23,6 +24,8 @@ class WebSocketService {
         this.client.onConnect = (frame: any) => {
             console.log(frame)
         }
+
+        this.client.activate()
     }
 }
 
