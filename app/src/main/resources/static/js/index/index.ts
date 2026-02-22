@@ -4,6 +4,9 @@ import {Client} from '@stomp/stompjs';
 import SockJS from 'sockjs-client'
 
 document.querySelector('#create-game')?.addEventListener('click', create_game)
+document.addEventListener("DOMContentLoaded", () => {
+    generateListOfGames().then()
+})
 
 const WEBSOCKET_URL = 'http://localhost:8080/websocket'
 
