@@ -23,7 +23,7 @@ class WebSocketService {
     }
 
     public activate() {
-        this.client.onConnect = (frame: any) => {
+        this.client.onConnect = () => {
             this.client.subscribe('/topic/updating-the-list-of-games', () => {
                 generateListOfGames().then()
             })
@@ -31,10 +31,17 @@ class WebSocketService {
 
         this.client.activate()
     }
+
+    public disconnect() {
+        this.client.deactivate(true).then()
+    }
+
 }
 
+const webSocketService: WebSocketService = new WebSocketService();
+
 document.addEventListener("DOMContentLoaded", () => {
-    new WebSocketService().activate()
+    webSocketService.activate()
 })
 
 async function generateListOfGames() {
@@ -99,8 +106,10 @@ function joinInToGame(id: string) {
     const username: string = (document.querySelector('#username') as HTMLInputElement).value
     if (id === '')
         return false
-    if (canJoin())
+    if (canJoin()) {
+        webSocketService.disconnect()
         window.location.href = `/game/${id}?username=${username}`
+    }
 }
 
 function canJoin(): boolean {
