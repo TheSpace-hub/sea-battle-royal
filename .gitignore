@@ -145,3 +145,4 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains+all,java,gradle
 
 app/src/main/resources/static/js/**/*.js
+node_modules
