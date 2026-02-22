@@ -3,6 +3,8 @@ package ru.seabattleroyal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.seabattleroyal.game.Game;
 import ru.seabattleroyal.repositories.GameRepository;
@@ -11,7 +13,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 @SpringBootApplication
-@RestController
+@Controller
 public class App {
 
     private final GameRepository repository;
@@ -27,6 +29,7 @@ public class App {
     }
 
     @PostMapping("/api/create-game")
+    @ResponseBody
     public Map<String, String> createGame(@RequestBody Map<String, Integer> body) {
         int numberOfPlayers = body.get("number-of-players");
         if (numberOfPlayers > 5 || numberOfPlayers < 2)
@@ -40,9 +43,22 @@ public class App {
     }
 
     @GetMapping("/api/list-of-games")
+    @ResponseBody
     public String getGames() {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(repository.getGames());
+    }
+
+    @GetMapping("/game/{id}")
+    public String getGame(@PathVariable String id, Model model, @RequestParam String username) {
+        Game game = repository.getGame(id);
+        if (game == null)
+            return "404";
+
+        model.addAttribute("id", id.toUpperCase());
+        model.addAttribute("maxPlayers", game.getNumberOfPlayers());
+        model.addAttribute("username", username);
+        return "battlefield";
     }
 
 }
