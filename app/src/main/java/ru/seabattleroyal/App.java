@@ -1,5 +1,6 @@
 package ru.seabattleroyal;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -50,12 +51,12 @@ public class App {
     }
 
     @GetMapping("/game")
-    public String getGame(Model model, @RequestParam String gameId, @RequestParam String username) {
+    public String getGame(HttpServletRequest request, Model model, @RequestParam String gameId, @RequestParam String username) {
         Game game = repository.getGame(gameId);
-        if (game == null)
-            return "404";
-
         model.addAttribute("gameId", gameId.toUpperCase());
+        if (game == null)
+            return "unknown-game";
+
         model.addAttribute("number-of-players", game.getNumberOfPlayers());
         model.addAttribute("username", username);
         return "battlefield";
