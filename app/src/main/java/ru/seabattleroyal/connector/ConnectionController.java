@@ -11,9 +11,6 @@ import ru.seabattleroyal.game.Game;
 import ru.seabattleroyal.game.Player;
 import ru.seabattleroyal.repositories.GameRepository;
 
-import java.util.Map;
-import java.util.Vector;
-
 
 @Controller
 @Slf4j
