@@ -9,12 +9,18 @@ const params = new URLSearchParams(window.location.search)
 const gameId: string = params.get('gameId') as string
 const username: string = params.get('username') as string
 
+function getCookie(name: string) {
+    const matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1] as string) : undefined;
+}
+
 class WebSocketService {
     private client: Client
 
     constructor() {
-        const session = document.cookie.search('session')
-        console.log('session: ' + session)
+        const session = getCookie('session')
         this.client = new Client({
             webSocketFactory: () => new SockJS(WEBSOCKET_URL),
             debug: (msg: string) => {
