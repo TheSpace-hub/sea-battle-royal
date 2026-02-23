@@ -7,15 +7,21 @@ const WEBSOCKET_URL = 'http://localhost:8080/websocket'
 
 const params = new URLSearchParams(window.location.search)
 const gameId: string = params.get('gameId') as string
+const username: string = params.get('username') as string
 
 class WebSocketService {
     private client: Client
 
     constructor() {
+        const session = document.cookie.search('session')
+        console.log('session: ' + session)
         this.client = new Client({
             webSocketFactory: () => new SockJS(WEBSOCKET_URL),
             debug: (msg: string) => {
                 console.log(msg)
+            },
+            connectHeaders: {
+                'username': username
             }
         })
     }
@@ -30,4 +36,10 @@ class WebSocketService {
         this.client.activate()
     }
 
+}
+
+const webSocketService = new WebSocketService()
+
+export function connect() {
+    webSocketService.activate()
 }

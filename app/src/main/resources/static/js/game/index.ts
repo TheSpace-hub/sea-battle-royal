@@ -1,3 +1,5 @@
+import {connect} from "./connector.js";
+
 class Player {
     private readonly _username: string
     public field: Field
@@ -33,3 +35,5 @@ enum CellType {
     WOUNDED,
     DEAD
 }
+
+connect()
