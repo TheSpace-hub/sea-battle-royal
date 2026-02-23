@@ -5,6 +5,9 @@ import SockJS from 'sockjs-client'
 
 const WEBSOCKET_URL = 'http://localhost:8080/websocket'
 
+const params = new URLSearchParams(window.location.search)
+const gameId: string = params.get('gameId') as string
+
 class WebSocketService {
     private client: Client
 
@@ -19,7 +22,9 @@ class WebSocketService {
 
     public activate() {
         this.client.onConnect = () => {
-            this.client.subscribe('/topic/game')
+            this.client.subscribe(`/topic/game-${gameId}`, () => {
+
+            })
         }
 
         this.client.activate()
