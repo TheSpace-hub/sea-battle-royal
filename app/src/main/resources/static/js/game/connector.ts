@@ -44,10 +44,10 @@ class Position {
 
 class Acton {
     private _action: number
-    private _username: string | undefined
-    private _position: Position | undefined
+    private _username: string | null
+    private _position: Position | null
 
-    constructor(action: number, username: string | undefined, position: Position | undefined) {
+    constructor(action: number, username: string | null, position: Position | null) {
         this._action = action;
         this._username = username;
         this._position = position;
@@ -55,32 +55,35 @@ class Acton {
 
     static parse(body: object): Acton {
         const type: number = ActionType[(body as any).type] as any as number
-        const username: string | undefined = (body as any).username
-        const position: Position | undefined = (body as any).position
+        const username: string | null = (body as any).username
+        let position: Position | null = null
+        if ((body as any).position !== null)
+            position = new Position((body as any).position.x, (body as any).position.y)
         return new Acton(type, username, position)
     }
 
-    get action(): ActionType {
+
+    get action(): number {
         return this._action;
     }
 
-    set action(value: ActionType) {
+    set action(value: number) {
         this._action = value;
     }
 
-    get username(): string | undefined {
+    get username(): string | null {
         return this._username;
     }
 
-    set username(value: string | undefined) {
+    set username(value: string | null) {
         this._username = value;
     }
 
-    get position(): Position | undefined {
+    get position(): Position | null {
         return this._position;
     }
 
-    set position(value: Position | undefined) {
+    set position(value: Position | null) {
         this._position = value;
     }
 }
