@@ -119,19 +119,13 @@ class WebSocketService {
         const session = getCookie('session')
         this.client = new Client({
             webSocketFactory: () => new SockJS(WEBSOCKET_URL),
+            connectHeaders: {
+                'gameId': gameId,
+                'username': username
+            },
             debug: (msg: string) => {
                 console.log(msg)
             }
-        })
-    }
-
-    private join(username: string) {
-        console.log('Join as ' + username)
-        this.client.publish({
-            destination: `/app/game.${gameId}.join`,
-            body: JSON.stringify({
-                'username': username
-            })
         })
     }
 
@@ -143,7 +137,6 @@ class WebSocketService {
                 console.log(`Data from /topic/game.${gameId}. Message is: ${message.body}`)
             })
 
-            this.join(username)
         }
 
         this.client.activate()
