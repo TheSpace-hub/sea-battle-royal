@@ -17,6 +17,8 @@ public class Game {
     private final Set<Player> players = new HashSet<>();
     @JsonProperty("number-of-players")
     private final int numberOfPlayers;
+    @JsonProperty("open-cells")
+    private final Set<Field.Position> openCells = new HashSet<>();
 
     public Game(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
