@@ -82,6 +82,14 @@ class Acton {
         this._username = value;
     }
 
+    get message(): string | null {
+        return this._message;
+    }
+
+    set message(value: string | null) {
+        this._message = value;
+    }
+
     get position(): Position | null {
         return this._position;
     }
