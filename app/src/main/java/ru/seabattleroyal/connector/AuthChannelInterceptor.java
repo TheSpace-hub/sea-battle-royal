@@ -35,15 +35,24 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
             if (accessor.getNativeHeader("username") != null && accessor.getNativeHeader("gameId") != null) {
                 String gameId = accessor.getNativeHeader("gameId").get(0);
                 String username = accessor.getNativeHeader("username").get(0);
+                String session = accessor.getNativeHeader("session").get(0);
 
                 Game game = repository.getGame(gameId);
                 if (game == null)
                     return null;
-                for (Player player : game.getPlayers())
-                    if (player.getUsername().equals(username))
+                System.out.println(gameId);
+                for (Player player : game.getPlayers()) {
+                    System.out.println(player.getUuid());
+                    if (player.getUsername().equals(username)) {
+                        if (player.getUuid().equals(session)) {
+                            messagingTemplate.convertAndSend("/topic/game." + gameId + ".reconnect", username);
+                            return message;
+                        }
                         return null;
+                    }
+                }
 
-                game.addPlayer(new Player(username));
+                game.addPlayer(new Player(username, session));
                 messagingTemplate.convertAndSend("/topic/game." + gameId + ".join", username);
             }
         }

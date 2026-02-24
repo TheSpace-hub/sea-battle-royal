@@ -53,7 +53,8 @@ class WebSocketService {
             webSocketFactory: () => new SockJS(WEBSOCKET_URL),
             connectHeaders: {
                 'gameId': gameId,
-                'username': username
+                'username': username,
+                'session': session
             },
             debug: (msg: string) => {
                 console.log(msg)
@@ -67,6 +68,10 @@ class WebSocketService {
             this.client.subscribe(`/topic/game.${gameId}.join`, (message: any) => {
                 const username: string = message.body
                 onPlayerJoin(username)
+            })
+            this.client.subscribe(`/topic/game.${gameId}.reconnect`, (message: any) => {
+                const username: string = message.body
+                onPlayerReconnect(username)
             })
 
         }
@@ -84,4 +89,8 @@ export function connect() {
 
 function onPlayerJoin(username: string) {
     playerActionLog(username, 'подключился к игре.')
+}
+
+function onPlayerReconnect(username: string) {
+    playerActionLog(username, 'переподключился к игре.')
 }
