@@ -66,7 +66,7 @@ class WebSocketService {
             basicLog('Ты подключился к игре.')
             this.client.subscribe(`/topic/game.${gameId}.join`, (message: any) => {
                 const username: string = message.body
-                playerActionLog(username, 'подключился к игре.')
+                onPlayerJoin(username)
             })
 
         }
@@ -80,4 +80,8 @@ const webSocketService = new WebSocketService()
 
 export function connect() {
     webSocketService.activate()
+}
+
+function onPlayerJoin(username: string) {
+    playerActionLog(username, 'подключился к игре.')
 }
