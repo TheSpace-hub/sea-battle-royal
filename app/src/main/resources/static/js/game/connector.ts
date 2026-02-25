@@ -5,6 +5,7 @@ import SockJS from 'sockjs-client'
 
 import {players, Player} from "./index.js";
 import {basicLog, importantActionLog, playerActionLog} from "./logging.js";
+import {addPlayerIntoList} from "./list-of-players.js";
 
 class Position {
     private _x: number
@@ -94,5 +95,5 @@ export function connect() {
 
 function onPlayerJoin(username: string, uuid: string) {
     players.set(uuid, new Player(username))
-
+    addPlayerIntoList(uuid)
 }
