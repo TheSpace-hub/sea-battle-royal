@@ -2,10 +2,12 @@ import {connect} from "./connector.js";
 
 class Player {
     private readonly _username: string
+    private readonly _uuid: string
     public field: Field
 
-    constructor(username: string) {
+    constructor(username: string, uuid: string) {
         this._username = username
+        this._uuid = uuid
         this.field = new Field()
     }
 
