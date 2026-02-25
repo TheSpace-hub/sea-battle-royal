@@ -10,6 +10,10 @@ export class Player {
         this._username = username
         this.field = new Field()
     }
+
+    get username(): string {
+        return this._username;
+    }
 }
 
 class Field {
@@ -28,6 +32,15 @@ class Field {
         // @ts-ignore
         return this._field[y][x]
     }
+}
+
+export enum PlayerStatus {
+    PREPARING,
+    READY,
+    MOVE,
+    WAIT,
+    LOOSE,
+    WON,
 }
 
 enum CellType {
