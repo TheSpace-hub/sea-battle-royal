@@ -33,7 +33,7 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
 
     @Override
     public @Nullable Message<?> preSend(Message<?> message, MessageChannel channel) {
-        StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             if (accessor.getNativeHeader("username") != null && accessor.getNativeHeader("gameId") != null) {
                 String gameId = accessor.getNativeHeader("gameId").get(0);
