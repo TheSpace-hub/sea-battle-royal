@@ -43,7 +43,6 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
                 Game game = repository.getGame(gameId);
                 if (game == null)
                     return null;
-                System.out.println(gameId);
                 for (Player player : game.getPlayers()) {
                     if (player.getSessionUuid().equals(session)) {
                         if (player.getUsername().equals(username)) {
