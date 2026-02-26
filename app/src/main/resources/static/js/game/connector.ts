@@ -37,7 +37,8 @@ const WEBSOCKET_URL = 'http://localhost:8080/websocket'
 
 const params = new URLSearchParams(window.location.search)
 const gameId: string = params.get('gameId') as string
-const username: string = params.get('username') as string
+const youUsername: string = params.get('username') as string
+let youUuid: string | null = null
 
 function getCookie(name: string) {
     const matches = document.cookie.match(new RegExp(
@@ -55,7 +56,7 @@ class WebSocketService {
             webSocketFactory: () => new SockJS(WEBSOCKET_URL),
             connectHeaders: {
                 'gameId': gameId,
-                'username': username,
+                'username': youUsername,
                 'session': session
             },
             debug: (msg: string) => {
@@ -65,13 +66,13 @@ class WebSocketService {
     }
 
     public activate() {
-        this.client.onConnect = () => {
+        this.client.onConnect = (frame: any) => {
             basicLog('Ты подключился к игре.')
             this.client.subscribe(`/topic/game.${gameId}.join`, (message: any) => {
                 const body: any = JSON.parse(message.body)
                 const username: string = body.username
                 const uuid: string = body.uuid
-                onPlayerJoin(username, uuid)
+                onPlayerJoin(uuid, username)
             })
             this.client.subscribe(`/topic/game.${gameId}.reconnect`, (message: any) => {
                 const body: any = JSON.parse(message.body)
@@ -79,7 +80,15 @@ class WebSocketService {
                 const uuid: string = body.uuid
                 playerActionLog(username, 'переподключился к игре.')
             })
+            this.client.subscribe(`/topic/game.${gameId}.information-about-players`, (message: any) => {
+                const body: Record<string, string> = JSON.parse(message.body)
+                informationAboutPlayers(body)
+            })
 
+            this.client.publish({
+                destination: `/app/info-is-needed`,
+                body: gameId
+            })
         }
 
         this.client.activate()
@@ -93,7 +102,32 @@ export function connect() {
     webSocketService.activate()
 }
 
-function onPlayerJoin(username: string, uuid: string) {
+function addPlayer(uuid: string, username: string) {
+    if (players.get(uuid) !== undefined) {
+        console.warn('Adding an existing player')
+        return
+    }
     players.set(uuid, new Player(username))
     addPlayerIntoList(uuid)
+}
+
+function onPlayerJoin(uuid: string, username: string) {
+    importantActionLog(username, 'подключился к бою!')
+    addPlayer(uuid, username)
+}
+
+function informationAboutPlayers(body: Record<string, string>) {
+    Object.keys(body).forEach((uuid: string) => {
+        const username: string = body[uuid] as string
+        if (players.get(uuid) === undefined) {
+            if (username === youUsername) {
+                addPlayer(uuid, username)
+                youUuid = uuid
+            } else {
+                addPlayer(uuid, username)
+            }
+        } else if ((players.get(uuid) as Player).username !== username) {
+            console.error('Uuid and username mismatch')
+        }
+    })
 }
