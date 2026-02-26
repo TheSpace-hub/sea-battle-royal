@@ -47,7 +47,7 @@ public class FieldVerify {
         List<Field.Position> positions = new ArrayList<>();
 
         Field.Position target = new Field.Position(start.getX(), start.getY());
-        Direction direction = null;
+        Direction direction;
         if (field.getCell(target.getX() + 1, target.getY()) == Field.CellType.SHIP) {
             direction = Direction.LEFT;
         } else if (field.getCell(target.getX(), target.getY() + 1) == Field.CellType.SHIP) {
