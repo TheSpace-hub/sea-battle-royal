@@ -33,6 +33,13 @@ public class Field {
     }
 
     public CellType getCell(int x, int y) {
+        if (y < field.length) {
+            if (x >= field[0].length) {
+                return null;
+            }
+        } else {
+            return null;
+        }
         return field[y][x];
     }
 
