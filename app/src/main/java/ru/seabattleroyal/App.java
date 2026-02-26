@@ -67,6 +67,7 @@ public class App {
         if (game == null)
             return "unknown-game";
 
+        model.addAttribute("number_of_players", game.getNumberOfPlayers());
         if (session.isEmpty()) {
             Cookie cookie = new Cookie("session", UUID.randomUUID().toString());
             cookie.setHttpOnly(false);
