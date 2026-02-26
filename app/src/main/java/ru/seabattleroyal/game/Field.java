@@ -6,8 +6,14 @@ import lombok.Setter;
 public class Field {
 
     private final CellType[][] field;
+    @Getter
+    private final int sizeX;
+    @Getter
+    private final int sizeY;
 
     public Field(CellType defaultField) {
+        sizeX = 10;
+        sizeY = 10;
         field = new CellType[10][10];
         for (int y = 0; y < 10; y++) {
             for (int x = 0; x < 10; x++) {
@@ -17,6 +23,8 @@ public class Field {
     }
 
     public Field(CellType[][] field) {
+        sizeX = 10;
+        sizeY = 10;
         this.field = field;
     }
 

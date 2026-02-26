@@ -93,7 +93,7 @@ class WebSocketService {
         const field = players.get(getYouUuid() as string)!.field
         this.client.publish({
             destination: `/app/game.${getGameId()}.verify-field`,
-            body: field
+            body: JSON.stringify(field.field)
         })
     }
 

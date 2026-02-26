@@ -6,11 +6,14 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import ru.seabattleroyal.game.Field;
 import ru.seabattleroyal.game.Game;
 import ru.seabattleroyal.game.Player;
 import ru.seabattleroyal.repositories.GameRepository;
+import ru.seabattleroyal.utils.FieldVerify;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,8 +46,12 @@ public class MessageController {
     }
 
     @MessageMapping("/game.{gameId}.verify-field")
-    public void verifyField(@Payload String field, @DestinationVariable String gameId) {
-        log.info("verify-field {}", field);
+    public void verifyField(@DestinationVariable String gameId, @Payload Field.CellType[][] field) {
+        if (new FieldVerify().isFieldCorrect(new Field(field))) {
+            log.info("Field is correct");
+        } else {
+            log.info("Field is not correct");
+        }
     }
 
 }

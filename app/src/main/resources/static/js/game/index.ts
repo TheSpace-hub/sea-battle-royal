@@ -62,6 +62,10 @@ class Field {
         // @ts-ignore
         return this._field[y][x]
     }
+
+    get field(): CellType[][] {
+        return this._field;
+    }
 }
 
 export enum PlayerStatus {
