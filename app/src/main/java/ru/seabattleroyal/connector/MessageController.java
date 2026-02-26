@@ -1,6 +1,7 @@
 package ru.seabattleroyal.connector;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -40,6 +41,11 @@ public class MessageController {
         }
         messagingTemplate.convertAndSend("/topic/game." + gameId + ".information-about-players",
                 mapper.writeValueAsString(players));
+    }
+
+    @MessageMapping("/game.{gameId}.verify-field")
+    public void verifyField(@Payload String field, @DestinationVariable String gameId) {
+        log.info("verify-field {}", field);
     }
 
 }

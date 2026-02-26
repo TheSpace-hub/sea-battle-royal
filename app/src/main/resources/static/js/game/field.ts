@@ -1,4 +1,5 @@
 import {CellType, getYouUuid, Player, players, PlayerStatus} from "./index.js";
+import {verifyYouField} from "./connector.js";
 
 const letters: string[] = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К']
 
@@ -6,6 +7,10 @@ const params = new URLSearchParams(window.location.search)
 const youUsername: string = params.get('username') as string
 
 document.querySelector('#the-username-of-the-main-player-in-the-fields')!.innerHTML = youUsername
+
+document.querySelector('#start-game-button')?.addEventListener('click', () => {
+    verifyYouField()
+})
 
 export function initBattlefield() {
     const battlefield: HTMLDivElement = document.getElementById('battlefield') as HTMLDivElement

@@ -90,11 +90,23 @@ class WebSocketService {
         this.client.activate()
     }
 
+    public verifyYouField() {
+        const field = players.get(getYouUuid() as string)!.field
+        this.client.publish({
+            destination: `/app/game.${getGameId()}.verify-field`,
+            body: field
+        })
+    }
+
 }
 
 export function connect() {
     webSocketService = new WebSocketService()
     webSocketService.activate()
+}
+
+export function verifyYouField() {
+    webSocketService?.verifyYouField()
 }
 
 function addPlayer(uuid: string, username: string) {
