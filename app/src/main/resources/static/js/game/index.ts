@@ -1,4 +1,5 @@
 import {connect} from "./connector.js";
+import {initBattlefield} from "./field.js";
 
 export const players: Map<string, Player> = new Map()
 
@@ -51,3 +52,4 @@ enum CellType {
 }
 
 connect()
+initBattlefield()
