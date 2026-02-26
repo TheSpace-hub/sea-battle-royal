@@ -5,7 +5,7 @@ import SockJS from 'sockjs-client'
 
 import {players, Player} from "./index.js";
 import {basicLog, importantActionLog, playerActionLog} from "./logging.js";
-import {addPlayerIntoList} from "./list-of-players.js";
+import {addPlayerIntoList, addYouInList} from "./list-of-players.js";
 
 class Position {
     private _x: number
@@ -108,7 +108,10 @@ function addPlayer(uuid: string, username: string) {
         return
     }
     players.set(uuid, new Player(username))
-    addPlayerIntoList(uuid)
+    if (uuid === youUuid)
+        addYouInList(uuid)
+    else
+        addPlayerIntoList(uuid)
 }
 
 function onPlayerJoin(uuid: string, username: string) {
@@ -120,12 +123,10 @@ function informationAboutPlayers(body: Record<string, string>) {
     Object.keys(body).forEach((uuid: string) => {
         const username: string = body[uuid] as string
         if (players.get(uuid) === undefined) {
-            if (username === youUsername) {
-                addPlayer(uuid, username)
+            if (username === youUsername)
                 youUuid = uuid
-            } else {
-                addPlayer(uuid, username)
-            }
+
+            addPlayer(uuid, username)
         } else if ((players.get(uuid) as Player).username !== username) {
             console.error('Uuid and username mismatch')
         }
