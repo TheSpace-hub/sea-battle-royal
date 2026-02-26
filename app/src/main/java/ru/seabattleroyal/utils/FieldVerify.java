@@ -48,10 +48,13 @@ public class FieldVerify {
         List<Field.Position> positions = new ArrayList<>();
 
         Field.Position target = new Field.Position(start.getX(), start.getY());
-        Direction direction;
+        Direction direction = null;
         if (field.getCell(target.getX() + 1, target.getY()) == Field.CellType.SHIP) {
             direction = Direction.LEFT;
-        } else if (field.getCell(target.getX(), target.getY() + 1) == Field.CellType.SHIP) {
+        }
+        if (field.getCell(target.getX(), target.getY() + 1) == Field.CellType.SHIP) {
+            if (direction == Direction.LEFT)
+                throw new InvalidShipException();
             direction = Direction.DOWN;
         } else {
             if (field.getCell(target.getX() + 1, target.getY() + 1) == Field.CellType.SHIP)
