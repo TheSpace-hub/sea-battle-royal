@@ -5,10 +5,12 @@ export const players: Map<string, Player> = new Map()
 
 export class Player {
     private readonly _username: string
+    public status: PlayerStatus
     public field: Field
 
     constructor(username: string) {
         this._username = username
+        this.status = PlayerStatus.CONNECTING
         this.field = new Field()
     }
 
@@ -36,6 +38,7 @@ class Field {
 }
 
 export enum PlayerStatus {
+    CONNECTING,
     PREPARING,
     READY,
     MOVE,
