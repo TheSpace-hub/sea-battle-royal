@@ -3,7 +3,7 @@ import {Client} from '@stomp/stompjs';
 // @ts-ignore
 import SockJS from 'sockjs-client'
 
-import {players, Player, getGameId, getYouUsername, getYouUuid, setYouUuid} from "./index.js";
+import {getGameId, getYouUsername, getYouUuid, Player, players, PlayerStatus, setYouUuid} from "./index.js";
 import {basicLog, importantActionLog, playerActionLog} from "./logging.js";
 import {addPlayerIntoList, addYouInList} from "./list-of-players.js";
 
@@ -103,9 +103,10 @@ function addPlayer(uuid: string, username: string) {
         return
     }
     players.set(uuid, new Player(username))
-    if (uuid === getYouUuid())
+    if (uuid === getYouUuid()) {
         addYouInList(uuid)
-    else
+        players.get(getYouUuid() as string)!.status = PlayerStatus.PREPARING
+    } else
         addPlayerIntoList(uuid)
 }
 
