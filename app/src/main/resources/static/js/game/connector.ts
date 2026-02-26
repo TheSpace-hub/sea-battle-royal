@@ -3,7 +3,7 @@ import {Client} from '@stomp/stompjs';
 // @ts-ignore
 import SockJS from 'sockjs-client'
 
-import {getGameId, getYouUsername, getYouUuid, Player, players, PlayerStatus, setYouUuid} from "./index.js";
+import {CellType, getGameId, getYouUsername, getYouUuid, Player, players, PlayerStatus, setYouUuid} from "./index.js";
 import {basicLog, importantActionLog, playerActionLog} from "./logging.js";
 import {addPlayerIntoList, addYouInList} from "./list-of-players.js";
 
@@ -116,6 +116,12 @@ function addPlayer(uuid: string, username: string) {
     players.set(uuid, new Player(username))
     if (uuid === getYouUuid()) {
         addYouInList(uuid)
+        const player = players.get(getYouUuid() as string) as Player
+        for (let y = 0; y < 10; y++) {
+            for (let x = 0; x < 10; x++) {
+                player.field.setCell(x, y, CellType.EMPTY)
+            }
+        }
         players.get(getYouUuid() as string)!.status = PlayerStatus.PREPARING
     } else
         addPlayerIntoList(uuid)
