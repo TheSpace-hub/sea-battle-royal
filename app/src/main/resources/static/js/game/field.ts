@@ -57,8 +57,6 @@ export function initBattlefield() {
                 cell.classList.add('ship')
                 player.field.setCell(x, y, CellType.SHIP)
             }
-        }// else if (getStatus() === gameStatusTypes.WAITING_SELF_MOVE) {
-        //     attack(x, y);
-        // }
+        }
     }
 }
