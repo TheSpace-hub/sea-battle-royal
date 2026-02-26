@@ -49,6 +49,7 @@ public class FieldVerify {
 
         Field.Position target = new Field.Position(start.getX(), start.getY());
         Direction direction = null;
+
         if (field.getCell(target.getX() + 1, target.getY()) == Field.CellType.SHIP) {
             direction = Direction.LEFT;
         }
@@ -56,15 +57,16 @@ public class FieldVerify {
             if (direction == Direction.LEFT)
                 throw new InvalidShipException();
             direction = Direction.DOWN;
-        } else {
+        } else if (direction == null) {
             if (field.getCell(target.getX() + 1, target.getY() + 1) == Field.CellType.SHIP)
                 throw new InvalidShipException();
 
             positions.add(new Field.Position(target.getX(), target.getY()));
             return positions;
         }
-
         while (field.getCell(target.getX(), target.getY()) == Field.CellType.SHIP) {
+            if (field.getCell(target.getX() + 1, target.getY() + 1) == Field.CellType.SHIP)
+                throw new InvalidShipException();
             positions.add(new Field.Position(target.getX(), target.getY()));
             if (direction == Direction.LEFT)
                 target.setX(target.getX() + 1);
