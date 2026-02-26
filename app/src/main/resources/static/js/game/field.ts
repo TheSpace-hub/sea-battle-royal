@@ -1,5 +1,10 @@
 const letters: string[] = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К']
 
+const params = new URLSearchParams(window.location.search)
+const youUsername: string = params.get('username') as string
+
+document.querySelector('#the-username-of-the-main-player-in-the-fields')!.innerHTML = youUsername
+
 export function initBattlefield() {
     const battlefield: HTMLDivElement = document.getElementById('battlefield') as HTMLDivElement
 
