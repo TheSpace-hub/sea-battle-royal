@@ -17,6 +17,7 @@ public class FieldVerify {
             System.out.println(ships);
             return false;
         } catch (Exception e) {
+            log.warn(e.fillInStackTrace().toString());
             e.fillInStackTrace();
             return false;
         }
@@ -53,6 +54,9 @@ public class FieldVerify {
         } else if (field.getCell(target.getX(), target.getY() + 1) == Field.CellType.SHIP) {
             direction = Direction.DOWN;
         } else {
+            if (field.getCell(target.getX() + 1, target.getY() + 1) == Field.CellType.SHIP)
+                throw new InvalidShipException();
+
             positions.add(new Field.Position(target.getX(), target.getY()));
             return positions;
         }
