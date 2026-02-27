@@ -12,7 +12,6 @@ import ru.seabattleroyal.game.Field;
 import ru.seabattleroyal.game.Game;
 import ru.seabattleroyal.game.Player;
 import ru.seabattleroyal.repositories.GameRepository;
-import ru.seabattleroyal.utils.FieldVerify;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
