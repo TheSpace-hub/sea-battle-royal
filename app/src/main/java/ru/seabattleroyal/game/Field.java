@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Field {
 
@@ -105,6 +106,11 @@ public class Field {
                 return (((Position) obj).getX() == this.x && ((Position) obj).getY() == this.y);
             }
             return super.equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y);
         }
     }
 }

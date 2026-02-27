@@ -43,12 +43,10 @@ public class FieldProcessingTools {
             for (int x = 0; x < field.getSizeX(); x++) {
                 boolean found = false;
                 for (Set<Field.Position> ship : ships) {
-                    if (found) break;
-                    for (Field.Position position : ship) {
-                        if (position.getX() == x && position.getY() == y) {
-                            found = true;
-                            break;
-                        }
+                    log.info("{}, {}, {}", ship, new Field.Position(x, y), ship.contains(new Field.Position(x, y)));
+                    if (ship.contains(new Field.Position(x, y))) {
+                        found = true;
+                        break;
                     }
                 }
                 if (found) continue;
