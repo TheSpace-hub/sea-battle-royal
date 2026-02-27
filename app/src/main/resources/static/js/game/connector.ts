@@ -66,26 +66,26 @@ class WebSocketService {
     public activate() {
         this.client.onConnect = (frame: any) => {
             basicLog('Ты подключился к игре.')
-            this.client.subscribe(`/topic/game.${getGameId()}.join`, (content: any) => {
-                const body: any = JSON.parse(content.body)
+            this.client.subscribe(`/topic/game.${getGameId()}.join`, (message: any) => {
+                const body: any = JSON.parse(message.body)
                 const username: string = body.username
                 const uuid: string = body.uuid
                 onPlayerJoin(uuid, username)
             })
-            this.client.subscribe(`/topic/game.${getGameId()}.reconnect`, (content: any) => {
-                const uuid: string = content.body as string
+            this.client.subscribe(`/topic/game.${getGameId()}.reconnect`, (message: any) => {
+                const uuid: string = message.body as string
                 const username = players.get(uuid)?.username as string
                 playerActionLog(username, 'переподключился к игре.')
             })
-            this.client.subscribe(`/topic/game.${getGameId()}.information-about-players`, (content: any) => {
-                const body: Record<string, string> = JSON.parse(content.body)
+            this.client.subscribe(`/topic/game.${getGameId()}.information-about-players`, (message: any) => {
+                const body: Record<string, string> = JSON.parse(message.body)
                 informationAboutPlayers(body)
             })
-            this.client.subscribe(`/topic/game.${getGameId()}.chat`, (content: any) => {
-                const body: Record<string, string> = JSON.parse(content.body)
+            this.client.subscribe(`/topic/game.${getGameId()}.chat`, (message: any) => {
+                const body: Record<string, string> = JSON.parse(message.body)
                 const uuid = body['uuid'] as string
-                const message = body['message'] as string
-                addChatMessage(players.get(uuid)?.username as string, message)
+                const content = body['content'] as string
+                addChatMessage(players.get(uuid)?.username as string, content)
             })
 
             this.client.publish({
@@ -104,12 +104,11 @@ class WebSocketService {
         })
     }
 
-    public sendMessage(message: string) {
+    public sendMessage(content: string) {
         this.client.publish({
             destination: `/app/game.${getGameId()}.chat`,
             body: JSON.stringify({
-                'message': message,
-                'uuid': getYouUuid()
+                'content': content
             })
         })
     }

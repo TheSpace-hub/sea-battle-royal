@@ -1,10 +1,12 @@
 package ru.seabattleroyal.connector;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import ru.seabattleroyal.game.Field;
 import ru.seabattleroyal.game.Game;
@@ -63,26 +65,25 @@ public class MessageController {
 
     @MessageMapping("/game.{gameId}.chat")
     public void chat(
+            Message<?> message,
             @DestinationVariable String gameId,
             @Payload Map<String, String> body
     ) {
-        log.info("Body is {}", body);
-        String uuid = body.get("uuid");
-        String message = body.get("message");
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         Game game = repository.getGame(gameId);
         if (game == null)
             return;
 
-        String username = "";
+        String content = body.get("content");
+
+        String uuid = "";
         for (Player player : game.getPlayers()) {
-            if (player.getUuid().equals(uuid)) {
-                username = player.getUsername();
+            if (player.getWebSocketSessionId().equals(accessor.getSessionId())) {
+                uuid = player.getUuid();
             }
         }
-        if (username.isEmpty())
-            return;
         messagingTemplate.convertAndSend("/topic/game." + gameId + ".chat",
-                mapper.writeValueAsString(Map.of("uuid", uuid, "message", message)));
+                mapper.writeValueAsString(Map.of("uuid", uuid, "content", content)));
     }
 
 }
