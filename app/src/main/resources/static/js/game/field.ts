@@ -103,6 +103,7 @@ function updateDisplay() {
     cells.forEach(cell => {
         const x = parseInt(cell.dataset.col as string)
         const y = parseInt(cell.dataset.row as string)
+        cell.classList.remove('dead', 'wounded', 'ship', 'empty')
         if (player.field.getCell(x, y) === CellType.DEAD) {
             cell.classList.add('dead')
         } else if (player.field.getCell(x, y) === CellType.WOUNDED) {
@@ -125,15 +126,27 @@ export function addPlayerIntoBattlefields(uuid: string) {
     })
 }
 
-export function updateFields(fields: Record<string, Record<string, Array<Array<number>> | number>>) {
+export function updateFields(fields: Record<string, Record<string, Array<Array<number>> | string>>) {
+    console.log(fields)
     Object.keys(fields).forEach(uuid => {
-        if (getYouUuid() === uuid)
+        const field = (fields[uuid] as Record<string, Array<Array<string>> | string>)['field'] as string[][]
+        if (getYouUuid() === uuid) {
+            const player = players.get(getYouUuid() as string) as Player
+            for (let y = 0; y < field.length; y++) {
+                for (let x = 0; x < (field.at(y) as string[]).length; x++) {
+                    if (field.at(y)?.at(x) === CellType.WOUNDED.toString() || field.at(y)?.at(x) === CellType.DEAD.toString()) {
+                        player.field.setCell(x, y, parseInt(field.at(y)!.at(x) as string))
+                    }
+                }
+            }
+            updateDisplay()
             return
+        }
         const player = players.get(uuid) as Player
-        const field = (fields[uuid] as Record<string, Array<Array<number>> | number>)['field'] as number[][]
-        player.field.setField(field)
+
+        
     })
-    console.log(players)
+    updateDisplay()
 }
 
 function createPlayerBattlefieldItem(uuid: string) {
