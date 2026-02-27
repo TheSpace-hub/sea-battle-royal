@@ -7,7 +7,7 @@ import {CellType, getGameId, getYouUsername, getYouUuid, Player, players, Player
 import {basicLog, importantLog} from "./logging.js";
 import {addPlayerIntoList, addYouInList, updateStatuses} from "./list-of-players.js";
 import {addChatMessage} from "./chat.js";
-import {addPlayerIntoBattlefields} from "./field.js";
+import {addPlayerIntoBattlefields, updateFields} from "./field.js";
 import {updateStatus} from "./status.js";
 import {getShipsSet} from "./fieldProcessingTools.js";
 
@@ -79,7 +79,7 @@ class WebSocketService {
             })
             this.client.subscribe(`/topic/game.${getGameId()}.update-fields`, (message: any) => {
                 const body = JSON.parse(message.body)
-                console.log(body)
+                updateFields(body)
             })
 
             this.client.publish({

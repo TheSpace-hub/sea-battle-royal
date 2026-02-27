@@ -48,7 +48,7 @@ export class Player {
 }
 
 export class Field {
-    private readonly _field: CellType[][]
+    private _field: CellType[][]
     private readonly _sizeX = 10;
     private readonly _sizeY = 10;
 
@@ -72,6 +72,10 @@ export class Field {
         }
         // @ts-ignore
         return this._field[y][x]
+    }
+
+    public setField(field: number[][]) {
+        this._field = field
     }
 
     get field(): CellType[][] {

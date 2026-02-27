@@ -3,8 +3,6 @@ import {attack, verifyYouField} from "./connector.js";
 
 const letters: string[] = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К']
 
-const params = new URLSearchParams(window.location.search)
-const youUsername: string = params.get('username') as string
 let selectedPlayer: string | null = null
 
 document.querySelector('#start-game-button')?.addEventListener('click', () => {
@@ -72,6 +70,17 @@ export function addPlayerIntoBattlefields(uuid: string) {
     document.getElementById(`mode-player-${uuid}`)?.addEventListener('click', function () {
         selectedPlayer = uuid
     })
+}
+
+export function updateFields(fields: Record<string, Record<string, Array<Array<number>> | number>>) {
+    Object.keys(fields).forEach(uuid => {
+        if (getYouUuid() === uuid)
+            return
+        const player = players.get(uuid) as Player
+        const field = (fields[uuid] as Record<string, Array<Array<number>> | number>)['field'] as number[][]
+        player.field.setField(field)
+    })
+    console.log(players)
 }
 
 function createPlayerBattlefieldItem(uuid: string) {
