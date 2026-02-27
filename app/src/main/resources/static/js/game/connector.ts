@@ -77,8 +77,9 @@ class WebSocketService {
             this.client.subscribe(`/topic/game.${getGameId()}.attack`, (message: any) => {
                 onPlayerAttack()
             })
-            this.client.subscribe(`/topic/game.${getGameId()}.update-field`, (message: any) => {
-                // const body
+            this.client.subscribe(`/topic/game.${getGameId()}.update-fields`, (message: any) => {
+                const body = JSON.parse(message.body)
+                console.log(body)
             })
 
             this.client.publish({

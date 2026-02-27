@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 public class Field {
 
+    @Getter
     private final CellType[][] field;
     @Getter
     private final int sizeX;
@@ -64,11 +65,11 @@ public class Field {
 
     @Getter
     public enum CellType {
-        UNKNOWN(1),
-        SHIP(2),
-        EMPTY(3),
-        WOUNDED(4),
-        DEAD(5);
+        UNKNOWN(0),
+        SHIP(1),
+        EMPTY(2),
+        WOUNDED(3),
+        DEAD(4);
 
         private final int code;
 

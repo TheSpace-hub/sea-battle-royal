@@ -68,6 +68,18 @@ public class Game {
         currentPlayerIndex = 0;
     }
 
+    public Map<String, Field> getPublicFields() {
+        Map<String, Field> publicFields = new HashMap<>();
+        for (Player player : players) {
+            Field field = new Field(Field.CellType.UNKNOWN);
+            openCells.forEach(openCell -> {
+                field.setCell(openCell.getX(), openCell.getY(), player.getField().getCell(openCell.getX(), openCell.getY()));
+            });
+            publicFields.put(player.getUuid(), field);
+        }
+        return publicFields;
+    }
+
     public static String generateId() {
         char[] code = new char[6];
         for (int i = 0; i < 6; i++) {
