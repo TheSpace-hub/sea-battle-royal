@@ -37,13 +37,13 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
             if (accessor.getNativeHeader("username") != null && accessor.getNativeHeader("gameId") != null) {
                 String gameId = accessor.getNativeHeader("gameId").get(0);
                 String username = accessor.getNativeHeader("username").get(0);
-                String session = accessor.getNativeHeader("session").get(0);
+                String cookieSession = accessor.getNativeHeader("session").get(0);
 
                 Game game = repository.getGame(gameId);
                 if (game == null)
                     return null;
                 for (Player player : game.getPlayers()) {
-                    if (player.getSessionUuid().equals(session)) {
+                    if (player.getCookieSessionUuid().equals(cookieSession)) {
                         if (player.getUsername().equals(username)) {
                             messagingTemplate.convertAndSend("/topic/game." + gameId + ".reconnect", player.getUuid());
                             return message;
@@ -52,7 +52,7 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
                     }
                 }
 
-                Player player = new Player(username, session);
+                Player player = new Player(username, cookieSession, accessor.getSessionId());
                 game.addPlayer(player);
                 messagingTemplate.convertAndSend("/topic/game." + gameId + ".join",
                         mapper.writeValueAsString(Map.of(
