@@ -71,8 +71,11 @@ public class MessageController {
         player.setField(new Field(field));
         messagingTemplate.convertAndSend("/topic/game." + gameId + ".ready", player.getUuid());
 
-
-        log.info("Is players ready: {}", game.isPlayersReady());
+        if (game.isPlayersReady()) {
+            game.start();
+            messagingTemplate.convertAndSend("/topic/game." + gameId + ".start");
+            messagingTemplate.convertAndSend("/topic/game." + gameId + ".move", game.getCurrentPlayer().getUuid());
+        }
     }
 
     @MessageMapping("/game.{gameId}.chat")
