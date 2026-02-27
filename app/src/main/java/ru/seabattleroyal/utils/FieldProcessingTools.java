@@ -12,7 +12,6 @@ import java.util.Set;
 public class FieldProcessingTools {
 
     public boolean isFieldCorrect(Field field) {
-        getShipsSet(field);
         try {
             Set<Set<Field.Position>> ships = getShipsSet(field);
             log.debug("Ships. Input {}, output {}", field, ships);
@@ -50,7 +49,7 @@ public class FieldProcessingTools {
                     }
                 }
                 if (found) continue;
-                if (field.getCell(x, y) == Field.CellType.SHIP) {
+                if (isShip(field, x, y)) {
                     Set<Field.Position> newShip = findTheShip(field, new Field.Position(x, y));
                     ships.add(newShip);
                 }
@@ -65,26 +64,27 @@ public class FieldProcessingTools {
         Field.Position target = new Field.Position(start.getX(), start.getY());
         Direction direction = null;
 
-        if (field.getCell(target.getX() + 1, target.getY()) == Field.CellType.SHIP) {
+        if (isShip(field, target.getX() + 1, target.getY())) {
             direction = Direction.LEFT;
         }
-        if (field.getCell(target.getX(), target.getY() + 1) == Field.CellType.SHIP) {
+        if (isShip(field, target.getX(), target.getY() + 1)) {
             if (direction == Direction.LEFT)
                 throw new InvalidShipException();
             direction = Direction.DOWN;
         } else if (direction == null) {
-            if (field.getCell(target.getX() + 1, target.getY() + 1) == Field.CellType.SHIP)
+            if (isShip(field, target.getX() + 1, target.getY() + 1))
                 throw new InvalidShipException();
-            if (field.getCell(target.getX() - 1, target.getY() + 1) == Field.CellType.SHIP)
+            if (isShip(field, target.getX() - 1, target.getY() + 1))
                 throw new InvalidShipException();
 
             positions.add(new Field.Position(target.getX(), target.getY()));
             return positions;
         }
-        while (field.getCell(target.getX(), target.getY()) == Field.CellType.SHIP) {
-            if (field.getCell(target.getX() + 1, target.getY() + 1) == Field.CellType.SHIP)
+
+        while (isShip(field, target.getX(), target.getY())) {
+            if (isShip(field, target.getX() + 1, target.getY() + 1))
                 throw new InvalidShipException();
-            if (field.getCell(target.getX() - 1, target.getY() + 1) == Field.CellType.SHIP)
+            if (isShip(field, target.getX() - 1, target.getY() + 1))
                 throw new InvalidShipException();
 
             positions.add(new Field.Position(target.getX(), target.getY()));
@@ -94,6 +94,10 @@ public class FieldProcessingTools {
                 target.setY(target.getY() + 1);
         }
         return positions;
+    }
+
+    private boolean isShip(Field field, int x, int y) {
+        return field.getCell(x, y) == Field.CellType.SHIP || field.getCell(x, y) == Field.CellType.WOUNDED || field.getCell(x, y) == Field.CellType.DEAD;
     }
 
     public static class InvalidShipException extends RuntimeException {
