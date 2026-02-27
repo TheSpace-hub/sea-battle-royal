@@ -124,6 +124,16 @@ class WebSocketService {
             })
         })
     }
+
+    public attack(x: number, y: number) {
+        this.client.publish({
+            destination: `/app/game.${getGameId()}.attack`,
+            body: JSON.stringify({
+                'x': x,
+                'y': y
+            })
+        })
+    }
 }
 
 export function connect() {
@@ -137,6 +147,10 @@ export function verifyYouField() {
 
 export function sendMessage(message: string) {
     webSocketService?.sendMessage(message)
+}
+
+export function attack(x: number, y: number) {
+    webSocketService?.attack(x, y)
 }
 
 function addPlayer(uuid: string, username: string) {

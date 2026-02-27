@@ -1,5 +1,5 @@
 import {CellType, getYouUuid, Player, players, PlayerStatus} from "./index.js";
-import {verifyYouField} from "./connector.js";
+import {attack, verifyYouField} from "./connector.js";
 
 const letters: string[] = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К']
 
@@ -61,6 +61,8 @@ export function initBattlefield() {
                 cell.classList.add('ship')
                 player.field.setCell(x, y, CellType.SHIP)
             }
+        } else if (player.status === PlayerStatus.MOVE) {
+            attack(x, y)
         }
     }
 }

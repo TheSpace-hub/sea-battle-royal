@@ -41,6 +41,12 @@ public class Game {
         return null;
     }
 
+    public void attack(Field.Position position) throws InvalidAttackException {
+        if (position.getX() < 0 || position.getY() < 0 || position.getX() >= 10 || position.getY() >= 10 || openCells.contains(position))
+            throw new InvalidAttackException();
+        openCells.add(position);
+    }
+
     public boolean isPlayersReady() {
         return players.size() == numberOfPlayers && players.stream().allMatch(player -> player.getField() != null);
     }
@@ -58,6 +64,11 @@ public class Game {
             code[i] = "abcdefghijklmnopqrstuvwxyz0123456789".charAt(random.nextInt(36));
         }
         return new String(code);
+    }
+
+    public static class InvalidAttackException extends Exception {
+        public InvalidAttackException() {
+        }
     }
 
 }

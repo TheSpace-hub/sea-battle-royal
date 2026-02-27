@@ -59,6 +59,8 @@ public class MessageController {
     ) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         Game game = repository.getGame(gameId);
+        assert game != null;
+
         Player player = null;
         for (Player p : game.getPlayers()) {
             if (p.getWebSocketSessionId().equals(accessor.getSessionId())) {
@@ -86,8 +88,7 @@ public class MessageController {
     ) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         Game game = repository.getGame(gameId);
-        if (game == null)
-            return;
+        assert game != null;
 
         String content = body.get("content");
 
@@ -99,6 +100,27 @@ public class MessageController {
         }
         messagingTemplate.convertAndSend("/topic/game." + gameId + ".chat",
                 mapper.writeValueAsString(Map.of("uuid", uuid, "content", content)));
+    }
+
+    @MessageMapping("/game.{gameId}.attack")
+    public void attack(
+            Message<?> message,
+            @DestinationVariable String gameId,
+            @Payload Map<String, String> body
+    ) {
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        Game game = repository.getGame(gameId);
+        assert game != null;
+
+        Field.Position position = new Field.Position(
+                Integer.parseInt(body.get("x")),
+                Integer.parseInt(body.get("y"))
+        );
+
+        try {
+            game.attack(position);
+        } catch (Game.InvalidAttackException ignored) {
+        }
     }
 
 }
