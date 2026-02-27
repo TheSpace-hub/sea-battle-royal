@@ -61,8 +61,7 @@ public class App {
             @CookieValue(value = "session", defaultValue = "") String session,
             HttpServletResponse response,
             Model model,
-            @RequestParam String gameId,
-            @RequestParam String username
+            @RequestParam String gameId
     ) {
         Game game = repository.getGame(gameId);
         model.addAttribute("gameId", gameId.toUpperCase());
