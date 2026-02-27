@@ -12,6 +12,7 @@ import ru.seabattleroyal.game.Field;
 import ru.seabattleroyal.game.Game;
 import ru.seabattleroyal.game.Player;
 import ru.seabattleroyal.repositories.GameRepository;
+import ru.seabattleroyal.utils.FieldProcessingTools;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class MessageController {
     private final SimpMessagingTemplate messagingTemplate;
     private final ObjectMapper mapper = new ObjectMapper();
     private final GameRepository repository;
+    private final FieldProcessingTools fieldProcessingTools = new FieldProcessingTools();
 
     public MessageController(
             SimpMessagingTemplate messagingTemplate,
