@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 import ru.seabattleroyal.game.Field;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Slf4j
@@ -13,7 +15,7 @@ public class FieldProcessingTools {
 
     public boolean isFieldCorrect(Field field) {
         try {
-            List<List<Field.Position>> ships = getShipsList(field);
+            Set<List<Field.Position>> ships = getShipsList(field);
             log.debug("Ships. Input {}, output {}", field, ships);
             log.debug("Ships count: {}. 4-cells: {}, 3-cells: {}, 2-cells: {}, 1-cell: {}. Is others: {}",
                     ships.size(),
@@ -36,8 +38,8 @@ public class FieldProcessingTools {
         }
     }
 
-    public List<List<Field.Position>> getShipsList(Field field) throws InvalidShipException {
-        List<List<Field.Position>> ships = new ArrayList<>();
+    public Set<List<Field.Position>> getShipsList(Field field) throws InvalidShipException {
+        Set<List<Field.Position>> ships = new HashSet<>();
         for (int y = 0; y < field.getSizeY(); y++) {
             for (int x = 0; x < field.getSizeX(); x++) {
                 boolean found = false;
