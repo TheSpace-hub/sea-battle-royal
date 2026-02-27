@@ -1,4 +1,4 @@
-import {Player, players, PlayerStatus} from "./index.js";
+import {getYouUuid, Player, players, PlayerStatus} from "./index.js";
 
 export function addPlayerIntoList(uuid: string) {
     document.querySelector('#list-of-players')?.insertAdjacentHTML('beforeend', createItem(uuid))
@@ -37,6 +37,8 @@ export function updateStatuses() {
                 name = 'Победитель!';
                 break;
         }
+        if (uuid === getYouUuid())
+            uuid = 'you'
         document.querySelector(`#status-${uuid}`)!.innerHTML = name;
     })
 }
