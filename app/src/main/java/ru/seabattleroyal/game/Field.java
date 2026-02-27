@@ -3,6 +3,8 @@ package ru.seabattleroyal.game;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
+
 public class Field {
 
     private final CellType[][] field;
@@ -33,14 +35,23 @@ public class Field {
     }
 
     public CellType getCell(int x, int y) {
-        if (y < field.length) {
-            if (x >= field[0].length) {
+        if (y >= 0 && y < field.length) {
+            if (x < 0 || x >= field[0].length) {
                 return null;
             }
         } else {
             return null;
         }
         return field[y][x];
+    }
+
+    @Override
+    public String toString() {
+        return "Field{" +
+                "field=" + Arrays.toString(field) +
+                ", sizeX=" + sizeX +
+                ", sizeY=" + sizeY +
+                '}';
     }
 
     @Getter
@@ -55,6 +66,11 @@ public class Field {
 
         CellType(int code) {
             this.code = code;
+        }
+
+        @Override
+        public String toString() {
+            return code + "";
         }
     }
 
