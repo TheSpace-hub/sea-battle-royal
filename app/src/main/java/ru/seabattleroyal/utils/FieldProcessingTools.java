@@ -13,7 +13,7 @@ public class FieldProcessingTools {
 
     public boolean isFieldCorrect(Field field) {
         try {
-            Set<Set<Field.Position>> ships = getShipsList(field);
+            Set<Set<Field.Position>> ships = getShipsSet(field);
             log.debug("Ships. Input {}, output {}", field, ships);
             log.debug("Ships count: {}. 4-cells: {}, 3-cells: {}, 2-cells: {}, 1-cell: {}. Is others: {}",
                     ships.size(),
@@ -36,7 +36,7 @@ public class FieldProcessingTools {
         }
     }
 
-    public Set<Set<Field.Position>> getShipsList(Field field) throws InvalidShipException {
+    public Set<Set<Field.Position>> getShipsSet(Field field) throws InvalidShipException {
         Set<Set<Field.Position>> ships = new HashSet<>();
         for (int y = 0; y < field.getSizeY(); y++) {
             for (int x = 0; x < field.getSizeX(); x++) {

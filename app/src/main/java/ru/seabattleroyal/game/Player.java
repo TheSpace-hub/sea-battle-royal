@@ -33,7 +33,7 @@ public class Player {
     }
 
     public void attack(Field.Position position) {
-        Set<Set<Field.Position>> ships = fieldProcessingTools.getShipsList(field);
+        Set<Set<Field.Position>> ships = fieldProcessingTools.getShipsSet(field);
         ships.forEach(ship -> {
             if (!ship.contains(position)) return;
 
