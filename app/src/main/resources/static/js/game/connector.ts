@@ -5,7 +5,7 @@ import SockJS from 'sockjs-client'
 
 import {CellType, getGameId, getYouUsername, getYouUuid, Player, players, PlayerStatus, setYouUuid} from "./index.js";
 import {basicLog, importantActionLog, playerActionLog} from "./logging.js";
-import {addPlayerIntoList, addYouInList} from "./list-of-players.js";
+import {addPlayerIntoList, addYouInList, updateStatuses} from "./list-of-players.js";
 import {addChatMessage} from "./chat.js";
 
 let webSocketService: WebSocketService | null = null
@@ -87,6 +87,10 @@ class WebSocketService {
                 const content = body['content'] as string
                 addChatMessage(players.get(uuid)?.username as string, content)
             })
+            this.client.subscribe(`/topic/game.${getGameId()}.ready`, (message: any) => {
+                const uuid = message.body as string
+                onPlayerReady(uuid)
+            })
 
             this.client.publish({
                 destination: `/app/game.${getGameId()}.info-is-needed`
@@ -163,4 +167,13 @@ function informationAboutPlayers(body: Record<string, string>) {
             console.error('Uuid and username mismatch')
         }
     })
+}
+
+function onPlayerReady(uuid: string) {
+    const player = players.get(uuid) as Player
+    player.status = PlayerStatus.READY
+    updateStatuses()
+    if (uuid === getYouUuid()) {
+        document.querySelector('#start-game-button')?.remove()
+    }
 }
