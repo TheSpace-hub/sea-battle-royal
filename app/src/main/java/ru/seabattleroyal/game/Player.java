@@ -2,6 +2,7 @@ package ru.seabattleroyal.game;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ru.seabattleroyal.utils.FieldProcessingTools;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
+@Slf4j
 @Getter
 @Setter
 public class Player {
@@ -34,10 +36,13 @@ public class Player {
 
     public void attack(Field.Position position) {
         Set<Set<Field.Position>> ships = fieldProcessingTools.getShipsSet(field);
+        if (field.getCell(position) == Field.CellType.SHIP) {
+            field.setCell(position, Field.CellType.WOUNDED);
+        }
+
         ships.forEach(ship -> {
             if (!ship.contains(position)) return;
 
-            field.setCell(position, Field.CellType.WOUNDED);
             for (Field.Position cell : ship) {
                 if (field.getCell(cell) == Field.CellType.SHIP)
                     return;
