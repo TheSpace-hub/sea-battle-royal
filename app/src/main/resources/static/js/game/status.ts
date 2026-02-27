@@ -3,8 +3,8 @@ import {getYouUuid, Player, players, PlayerStatus} from "./index.js";
 export function updateStatus() {
     const statusInfo: HTMLDivElement = document.querySelector('#status-info') as HTMLDivElement
 
-    if (players.get(getYouUuid() as string)?.status === PlayerStatus.PREPARING) {
-        statusInfo.innerHTML = getStatusDescriptionItem(`Расставь свой флот`)
+    if (players.get(getYouUuid() as string)?.status === PlayerStatus.READY) {
+        statusInfo.innerHTML = getStatusDescriptionItem(`Дождить, пока другие расставят корабли`)
         return
     }
 

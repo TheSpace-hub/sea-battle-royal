@@ -183,6 +183,7 @@ function onPlayerReady(uuid: string) {
     const player = players.get(uuid) as Player
     player.status = PlayerStatus.READY
     updateStatuses()
+    updateStatus()
     if (uuid === getYouUuid()) {
         document.querySelector('#start-game-button')?.remove()
     }
