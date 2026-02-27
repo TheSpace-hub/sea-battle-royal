@@ -14,10 +14,24 @@ public class FieldVerify {
     public boolean isFieldCorrect(Field field) {
         try {
             List<List<Field.Position>> ships = getShipsList(field);
-            System.out.println(ships);
-            return false;
+            log.debug("Ships. Input {}, output {}", field, ships);
+            log.debug("Ships count: {}. 4-cells: {}, 3-cells: {}, 2-cells: {}, 1-cell: {}. Is others: {}",
+                    ships.size(),
+                    ships.stream().filter(ship -> ship.size() == 4).count(),
+                    ships.stream().filter(ship -> ship.size() == 3).count(),
+                    ships.stream().filter(ship -> ship.size() == 2).count(),
+                    ships.stream().filter(ship -> ship.size() == 1).count(),
+                    ships.stream().noneMatch(ship -> ship.size() != 4 && ship.size() != 3 && ship.size() != 2 && ship.size() != 1)
+            );
+
+            return ships.size() == 10
+                    && ships.stream().filter(ship -> ship.size() == 4).count() == 1
+                    && ships.stream().filter(ship -> ship.size() == 3).count() == 2
+                    && ships.stream().filter(ship -> ship.size() == 2).count() == 3
+                    && ships.stream().filter(ship -> ship.size() == 1).count() == 4
+                    && ships.stream().noneMatch(ship -> ship.size() != 4 && ship.size() != 3 && ship.size() != 2 && ship.size() != 1);
         } catch (Exception e) {
-            log.warn(e.fillInStackTrace().toString());
+            log.error("", e);
             e.fillInStackTrace();
             return false;
         }
