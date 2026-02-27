@@ -75,7 +75,6 @@ class WebSocketService {
             })
             this.client.subscribe(`/topic/game.${getGameId()}.reconnect`, (message: any) => {
                 const uuid: string = message.body as string
-                const username = players.get(uuid)?.username as string
                 importantLog(`Игрок ${uuid} переподключился к игре.`)
             })
             this.client.subscribe(`/topic/game.${getGameId()}.information-about-players`, (message: any) => {
