@@ -45,6 +45,9 @@ public class Game {
         if (position.getX() < 0 || position.getY() < 0 || position.getX() >= 10 || position.getY() >= 10 || openCells.contains(position))
             throw new InvalidAttackException();
         openCells.add(position);
+        for (Player player : players) {
+            player.attack(position);
+        }
     }
 
     public boolean isPlayersReady() {

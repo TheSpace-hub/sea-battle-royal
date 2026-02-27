@@ -2,9 +2,11 @@ package ru.seabattleroyal.game;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.seabattleroyal.utils.FieldProcessingTools;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -12,6 +14,7 @@ import java.util.UUID;
 public class Player {
 
     private static final Random random = new Random();
+    private static final FieldProcessingTools fieldProcessingTools = new FieldProcessingTools();
 
     String username;
     int color;
@@ -27,6 +30,21 @@ public class Player {
         this.webSocketSessionId = webSocketSessionId;
         this.field = null;
         this.color = List.of(0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff).get(random.nextInt(0, 5));
+    }
+
+    public void attack(Field.Position position) {
+        Set<Set<Field.Position>> ships = fieldProcessingTools.getShipsList(field);
+        ships.forEach(ship -> {
+            if (!ship.contains(position)) return;
+
+            field.setCell(position, Field.CellType.WOUNDED);
+            for (Field.Position cell : ship) {
+                if (field.getCell(cell) == Field.CellType.SHIP)
+                    return;
+            }
+
+            ship.forEach(cell -> field.setCell(cell, Field.CellType.DEAD));
+        });
     }
 
 }
