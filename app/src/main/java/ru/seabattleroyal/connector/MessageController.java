@@ -58,17 +58,18 @@ public class MessageController {
             @Payload Field.CellType[][] field
     ) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        log.info(accessor.getSessionId());
         Game game = repository.getGame(gameId);
-        String uuid = null;
-        for (Player player : game.getPlayers()) {
-            if (player.getWebSocketSessionId().equals(accessor.getSessionId())) {
-                uuid = player.getUuid();
+        Player player = null;
+        for (Player p : game.getPlayers()) {
+            if (p.getWebSocketSessionId().equals(accessor.getSessionId())) {
+                player = p;
             }
         }
+
         // TODO - вернуть логику проверки поля на корректность.
-        assert uuid != null;
-        messagingTemplate.convertAndSend("/topic/game." + gameId + ".ready", uuid);
+        assert player != null;
+        player.setField(new Field(field));
+        messagingTemplate.convertAndSend("/topic/game." + gameId + ".ready", player.getUuid());
     }
 
     @MessageMapping("/game.{gameId}.chat")
