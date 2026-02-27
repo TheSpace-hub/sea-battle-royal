@@ -6,6 +6,7 @@ import SockJS from 'sockjs-client'
 import {CellType, getGameId, getYouUsername, getYouUuid, Player, players, PlayerStatus, setYouUuid} from "./index.js";
 import {basicLog, importantActionLog, playerActionLog} from "./logging.js";
 import {addPlayerIntoList, addYouInList} from "./list-of-players.js";
+import {addChatMessage} from "./chat.js";
 
 let webSocketService: WebSocketService | null = null
 
@@ -80,6 +81,12 @@ class WebSocketService {
                 const body: Record<string, string> = JSON.parse(message.body)
                 informationAboutPlayers(body)
             })
+            this.client.subscribe(`/topic/game.${getGameId()}.chat`, (content: any) => {
+                const body: Record<string, string> = JSON.parse(content.body)
+                const uuid = body['uuid'] as string
+                const message = body['message'] as string
+                addChatMessage(players.get(uuid)?.username as string, message)
+            })
 
             this.client.publish({
                 destination: `/app/game.${getGameId()}.info-is-needed`
@@ -97,6 +104,15 @@ class WebSocketService {
         })
     }
 
+    public sendMessage(message: string) {
+        this.client.publish({
+            destination: `/app/game.${getGameId()}.chat`,
+            body: JSON.stringify({
+                'message': message,
+                'uuid': getYouUuid()
+            })
+        })
+    }
 }
 
 export function connect() {
@@ -106,6 +122,10 @@ export function connect() {
 
 export function verifyYouField() {
     webSocketService?.verifyYouField()
+}
+
+export function sendMessage(message: string) {
+    webSocketService?.sendMessage(message)
 }
 
 function addPlayer(uuid: string, username: string) {

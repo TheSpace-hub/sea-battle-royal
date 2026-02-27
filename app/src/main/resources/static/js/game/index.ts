@@ -1,5 +1,6 @@
 import {connect} from "./connector.js";
 import {initBattlefield} from "./field.js";
+import './chat.js'
 
 export const players: Map<string, Player> = new Map()
 

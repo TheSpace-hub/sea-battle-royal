@@ -24,13 +24,18 @@ public class MessageController {
     private final ObjectMapper mapper = new ObjectMapper();
     private final GameRepository repository;
 
-    public MessageController(SimpMessagingTemplate messagingTemplate, GameRepository repository) {
+    public MessageController(
+            SimpMessagingTemplate messagingTemplate,
+            GameRepository repository
+    ) {
         this.messagingTemplate = messagingTemplate;
         this.repository = repository;
     }
 
     @MessageMapping("/game.{gameId}.info-is-needed")
-    public void infoIsNeeded(@DestinationVariable String gameId) {
+    public void infoIsNeeded(
+            @DestinationVariable String gameId
+    ) {
         Game game = repository.getGame(gameId);
         if (game == null) {
             return;
@@ -45,12 +50,39 @@ public class MessageController {
     }
 
     @MessageMapping("/game.{gameId}.verify-field")
-    public void verifyField(@DestinationVariable String gameId, @Payload Field.CellType[][] field) {
+    public void verifyField(
+            @DestinationVariable String gameId,
+            @Payload Field.CellType[][] field
+    ) {
         if (new FieldVerify().isFieldCorrect(new Field(field))) {
             log.info("Field is correct");
         } else {
             log.info("Field is not correct");
         }
+    }
+
+    @MessageMapping("/game.{gameId}.chat")
+    public void chat(
+            @DestinationVariable String gameId,
+            @Payload Map<String, String> body
+    ) {
+        log.info("Body is {}", body);
+        String uuid = body.get("uuid");
+        String message = body.get("message");
+        Game game = repository.getGame(gameId);
+        if (game == null)
+            return;
+
+        String username = "";
+        for (Player player : game.getPlayers()) {
+            if (player.getUuid().equals(uuid)) {
+                username = player.getUsername();
+            }
+        }
+        if (username.isEmpty())
+            return;
+        messagingTemplate.convertAndSend("/topic/game." + gameId + ".chat",
+                mapper.writeValueAsString(Map.of("uuid", uuid, "message", message)));
     }
 
 }

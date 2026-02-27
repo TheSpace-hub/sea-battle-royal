@@ -1,3 +1,10 @@
+import {sendMessage} from "./connector.js";
+
+document.querySelector('#chat-send')?.addEventListener('click', () => {
+    const message = (document.querySelector('#chat-input') as HTMLInputElement).value
+    sendMessage(message)
+})
+
 export function addChatMessage(username: string, message: string) {
     const chatContainer: HTMLDivElement = document.getElementById('chat-messages') as HTMLDivElement
     if (!chatContainer) return;
