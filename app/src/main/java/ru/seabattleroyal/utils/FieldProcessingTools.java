@@ -12,6 +12,7 @@ import java.util.Set;
 public class FieldProcessingTools {
 
     public boolean isFieldCorrect(Field field) {
+        getShipsSet(field);
         try {
             Set<Set<Field.Position>> ships = getShipsSet(field);
             log.debug("Ships. Input {}, output {}", field, ships);
@@ -42,9 +43,12 @@ public class FieldProcessingTools {
             for (int x = 0; x < field.getSizeX(); x++) {
                 boolean found = false;
                 for (Set<Field.Position> ship : ships) {
-                    if (ship.contains(new Field.Position(x, y))) {
-                        found = true;
-                        break;
+                    if (found) break;
+                    for (Field.Position position : ship) {
+                        if (position.getX() == x && position.getY() == y) {
+                            found = true;
+                            break;
+                        }
                     }
                 }
                 if (found) continue;
