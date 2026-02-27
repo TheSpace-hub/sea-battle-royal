@@ -4,7 +4,7 @@ import {Client} from '@stomp/stompjs';
 import SockJS from 'sockjs-client'
 
 import {CellType, getGameId, getYouUsername, getYouUuid, Player, players, PlayerStatus, setYouUuid} from "./index.js";
-import {basicLog, importantActionLog, playerActionLog} from "./logging.js";
+import {basicLog, importantLog} from "./logging.js";
 import {addPlayerIntoList, addYouInList, updateStatuses} from "./list-of-players.js";
 import {addChatMessage} from "./chat.js";
 import {addPlayerIntoBattlefields} from "./field.js";
@@ -76,7 +76,7 @@ class WebSocketService {
             this.client.subscribe(`/topic/game.${getGameId()}.reconnect`, (message: any) => {
                 const uuid: string = message.body as string
                 const username = players.get(uuid)?.username as string
-                playerActionLog(username, 'переподключился к игре.')
+                importantLog(`${uuid} переподключился к игре.`)
             })
             this.client.subscribe(`/topic/game.${getGameId()}.information-about-players`, (message: any) => {
                 const body: Record<string, string> = JSON.parse(message.body)
@@ -91,6 +91,9 @@ class WebSocketService {
             this.client.subscribe(`/topic/game.${getGameId()}.ready`, (message: any) => {
                 const uuid = message.body as string
                 onPlayerReady(uuid)
+            })
+            this.client.subscribe(`/topic/game.${getGameId()}.start`, () => {
+                onGameReady()
             })
 
             this.client.publish({
@@ -154,7 +157,7 @@ function addPlayer(uuid: string, username: string) {
 }
 
 function onPlayerJoin(uuid: string, username: string) {
-    importantActionLog(username, 'подключился к бою!')
+    importantLog(`${uuid} подключился к бою!`)
     addPlayer(uuid, username)
 }
 
@@ -179,5 +182,9 @@ function onPlayerReady(uuid: string) {
     if (uuid === getYouUuid()) {
         document.querySelector('#start-game-button')?.remove()
     }
-    importantActionLog(player.username, 'расставил свой флот')
+    importantLog(`${uuid} расставил свой флот`)
+}
+
+function onGameReady() {
+
 }

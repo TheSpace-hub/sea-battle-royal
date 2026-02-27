@@ -1,53 +1,42 @@
+import {Player, players} from "./index.js";
+
 export function basicLog(content: string) {
     document.querySelector('#logs')?.insertAdjacentHTML('afterbegin', createBasicLogItem(content))
 }
 
-export function playerActionLog(username: string, content: string) {
-    document.querySelector('#logs')?.insertAdjacentHTML('afterbegin', createPlayerActionLogItem(username, content))
-}
-
-export function importantActionLog(username: string, content: string) {
-    document.querySelector('#logs')?.insertAdjacentHTML('afterbegin', createImportantActionLogItem(username, content))
+export function importantLog(content: string) {
+    document.querySelector('#logs')?.insertAdjacentHTML('afterbegin', createImportantLogItem(content))
 }
 
 function createBasicLogItem(content: string) {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const time = `${hours}:${minutes}`;
-
     return `
 <div class="mb-2">
-    <span class="badge bg-secondary">${time}</span>
-    <span>${content}</span>
+    <span class="badge bg-secondary">${getNowTime()}</span>
+    <span>${getModifiedContent(content)}</span>
 </div>
 `
 }
 
-function createPlayerActionLogItem(username: string, content: string) {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const time = `${hours}:${minutes}`;
-
+function createImportantLogItem(content: string) {
     return `
 <div class="mb-2">
-    <span class="badge bg-secondary">${time}</span>
-    <span>Игрок <strong>${username}</strong> ${content}</span>
+    <span class="badge bg-primary">${getNowTime()}</span>
+    <span>${getModifiedContent(content)}</span>
 </div>
 `
 }
 
-function createImportantActionLogItem(username: string, content: string) {
+function getModifiedContent(content: string): string {
+    players.keys().forEach((uuid: string) => {
+        const player = players.get(uuid) as Player
+        content.replaceAll(uuid, `<b>${player?.username}</b>`)
+    })
+    return content
+}
+
+function getNowTime(): string {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
-    const time = `${hours}:${minutes}`;
-
-    return `
-<div class="mb-2">
-    <span class="badge bg-primary">${time}</span>
-    <span>Игрок <strong>${username}</strong> ${content}</span>
-</div>
-`
+    return `${hours}:${minutes}`;
 }
