@@ -125,8 +125,7 @@ public class MessageController {
             return;
         }
 
-        messagingTemplate.convertAndSend("/topic/game." + gameId + ".attack",
-                mapper.writeValueAsString(Map.of("x", position.getX(), "y", position.getY())));
+        messagingTemplate.convertAndSend("/topic/game." + gameId + ".attack", "");
     }
 
 }

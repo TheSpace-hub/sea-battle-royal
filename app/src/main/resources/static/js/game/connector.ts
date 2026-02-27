@@ -9,6 +9,7 @@ import {addPlayerIntoList, addYouInList, updateStatuses} from "./list-of-players
 import {addChatMessage} from "./chat.js";
 import {addPlayerIntoBattlefields} from "./field.js";
 import {updateStatus} from "./status.js";
+import {getShipsSet} from "./fieldProcessingTools.js";
 
 let webSocketService: WebSocketService | null = null
 
@@ -74,10 +75,10 @@ class WebSocketService {
                 onPlayerMove(uuid)
             })
             this.client.subscribe(`/topic/game.${getGameId()}.attack`, (message: any) => {
-                const body: Record<string, number> = JSON.parse(message.body)
-                const x = body.x as number
-                const y = body.y as number
-                onPlayerAttack(x, y)
+                onPlayerAttack()
+            })
+            this.client.subscribe(`/topic/game.${getGameId()}.update-field`, (message: any) => {
+                // const body
             })
 
             this.client.publish({
@@ -206,11 +207,10 @@ function onPlayerMove(uuid: string) {
     updateStatus()
 }
 
-function onPlayerAttack(x: number, y: number) {
+function onPlayerAttack() {
     players.keys().forEach((uuid) => {
         if (players.get(uuid)?.status == PlayerStatus.MOVE) {
             basicLog(`Капитан ${uuid} сделал свой залп`)
         }
     })
-    console.log('attack ' + x + ' ' + y)
 }
