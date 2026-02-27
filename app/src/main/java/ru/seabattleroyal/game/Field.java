@@ -30,8 +30,16 @@ public class Field {
         this.field = field;
     }
 
+    public void setCell(Position position, CellType cell) {
+        setCell(position.getX(), position.getY(), cell);
+    }
+
     public void setCell(int x, int y, CellType cell) {
         field[y][x] = cell;
+    }
+
+    public CellType getCell(Position position) {
+        return getCell(position.getX(), position.getY());
     }
 
     public CellType getCell(int x, int y) {
