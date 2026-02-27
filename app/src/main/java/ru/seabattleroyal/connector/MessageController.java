@@ -73,7 +73,7 @@ public class MessageController {
 
         if (game.isPlayersReady()) {
             game.start();
-            messagingTemplate.convertAndSend("/topic/game." + gameId + ".start");
+            messagingTemplate.convertAndSend("/topic/game." + gameId + ".start", "");
             messagingTemplate.convertAndSend("/topic/game." + gameId + ".move", game.getCurrentPlayer().getUuid());
         }
     }
