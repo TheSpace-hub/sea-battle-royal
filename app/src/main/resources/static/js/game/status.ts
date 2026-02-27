@@ -21,8 +21,7 @@ function getStatusDescriptionItem(content: string) {
     //<span class="badge bg-primary">Морской Волк</span>
     return `
 <div class="mb-2 mb-md-0" id="status-info">
-    <strong>Статус:</strong> <span>Ожидание хода игрока </span>
-    ${getModifiedContent(content)}
+    <strong>Статус:</strong> <span>${getModifiedContent(content)}</span>
 </div>
 `
 }
