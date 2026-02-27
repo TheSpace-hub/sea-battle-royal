@@ -32,6 +32,15 @@ public class Game {
         players.remove(player);
     }
 
+    public Player getPlayer(String uuid) {
+        for (Player player : players) {
+            if (player.getUuid().equals(uuid)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
     public static String generateId() {
         char[] code = new char[6];
         for (int i = 0; i < 6; i++) {
