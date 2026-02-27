@@ -53,22 +53,24 @@ async function generateListOfGames() {
         if (!response.ok) {
             console.error(response.statusText)
         }
-        const data: Array<{ [gameId: string]: object }> = await response.json()
+        const data: Array<Record<string, number>> = await response.json()
 
         const listOfGames = document.querySelector('#list-of-games')
         while (listOfGames?.firstChild) {
             listOfGames.removeChild(listOfGames?.firstChild)
         }
         for (const [gameId, game] of Object.entries(data)) {
-            addGameToListOfGames(gameId, (game['players'] as []).length, game['number-of-players'] as unknown as number)
+            const numberOfPlayers: number = game['number-of-players'] as number
+            const playersInGame: number = game['players-in-game'] as number
+            addGameToListOfGames(gameId, playersInGame, numberOfPlayers)
         }
     } catch (error) {
         console.error(error)
     }
 }
 
-function addGameToListOfGames(gameId: string, players: number, numberOfPlayers: number) {
-    document.querySelector('#list-of-games')?.insertAdjacentHTML('beforeend', createItem(gameId, players, numberOfPlayers))
+function addGameToListOfGames(gameId: string, playersInGame: number, numberOfPlayers: number) {
+    document.querySelector('#list-of-games')?.insertAdjacentHTML('beforeend', createItem(gameId, playersInGame, numberOfPlayers))
     document.querySelector(`#game-${gameId}`)?.addEventListener('click', () => {
         joinInToGame(gameId)
     })

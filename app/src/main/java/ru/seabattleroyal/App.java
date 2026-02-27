@@ -13,6 +13,7 @@ import ru.seabattleroyal.game.Player;
 import ru.seabattleroyal.repositories.GameRepository;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -53,7 +54,13 @@ public class App {
     @GetMapping("/api/list-of-games")
     @ResponseBody
     public String getGames() {
-        return mapper.writeValueAsString(repository.getGames());
+        Map<String, Map<String, Integer>> games = new HashMap<>();
+        repository.getGames().forEach((gameId, game) -> {
+            games.put(gameId, Map.of(
+                    "number-of-players", game.getNumberOfPlayers(),
+                    "players-in-game", game.getPlayers().size()));
+        });
+        return mapper.writeValueAsString(games);
     }
 
     @GetMapping("/game")
