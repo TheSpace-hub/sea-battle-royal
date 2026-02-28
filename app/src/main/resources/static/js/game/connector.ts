@@ -7,7 +7,7 @@ import {CellType, getGameId, getYouUsername, getYouUuid, Player, players, Player
 import {basicLog, importantLog} from "./logging.js";
 import {addPlayerIntoList, addYouInList, updateStatuses} from "./list-of-players.js";
 import {addChatMessage} from "./chat.js";
-import {addPlayerIntoBattlefields, updateFields} from "./field.js";
+import {addPlayerIntoBattlefields, updateFields, updateYouField} from "./field.js";
 import {updateStatus} from "./status.js";
 
 let webSocketService: WebSocketService | null = null
@@ -118,7 +118,8 @@ class WebSocketService {
 
     public subscribeToPrivateFieldDestination() {
         this.client.subscribe(`/topic/game.${getGameId()}.private-field.${getYouUuid()}`, (message: any) => {
-            console.log('You field is ' + message.body)
+            const body = JSON.parse(message.body)
+            updateYouField(body.field)
         })
     }
 }
