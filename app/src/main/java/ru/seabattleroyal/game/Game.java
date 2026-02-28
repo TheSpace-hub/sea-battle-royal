@@ -79,12 +79,17 @@ public class Game {
             if (player.field.getCell(position) != Field.CellType.EMPTY)
                 return;
         }
+        chooseNextPlayer();
+    }
 
-        if (currentPlayerIndex == numberOfPlayers - 1) {
-            currentPlayerIndex = 0;
-        } else {
-            currentPlayerIndex++;
-        }
+    public void chooseNextPlayer() {
+        do {
+            if (currentPlayerIndex == numberOfPlayers - 1) {
+                currentPlayerIndex = 0;
+            } else {
+                currentPlayerIndex++;
+            }
+        } while (!players.get(currentPlayerIndex).isAlive());
     }
 
     public Set<Player> getAlivePlayers() {
