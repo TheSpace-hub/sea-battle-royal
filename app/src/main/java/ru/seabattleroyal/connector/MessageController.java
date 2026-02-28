@@ -135,7 +135,9 @@ public class MessageController {
         messagingTemplate.convertAndSend("/topic/game." + gameId + ".attack", "");
         messagingTemplate.convertAndSend("/topic/game." + gameId + ".move", game.getPlayers().get(game.getCurrentPlayerIndex()).getUuid());
         messagingTemplate.convertAndSend("/topic/game." + gameId + ".update-fields", mapper.writeValueAsString(game.getPublicFields()));
-
+        for (Player player : game.getPlayers()) {
+            messagingTemplate.convertAndSend("/topic/private-field." + player.getUuid(), mapper.writeValueAsString(player.getField()));
+        }
     }
 
 }
