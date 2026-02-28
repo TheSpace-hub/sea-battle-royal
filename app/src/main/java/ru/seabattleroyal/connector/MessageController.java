@@ -99,7 +99,8 @@ public class MessageController {
     ) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         Game game = repository.getGame(gameId);
-        assert game != null;
+        if (game == null)
+            return;
 
         String content = body.get("content");
 
@@ -140,7 +141,9 @@ public class MessageController {
                 }
             }
             if (game.getAlivePlayers().size() == 1) {
-                messagingTemplate.convertAndSend("/topic/game." + gameId + ".won", game.getAlivePlayers().stream().findFirst().get().getUuid());
+                messagingTemplate.convertAndSend("/topic/game." + gameId + ".won",
+                        game.getAlivePlayers().stream().findFirst().orElse(null).getUuid());
+                repository.deleteGame(gameId);
             }
         } catch (Game.InvalidAttackException ignored) {
             return;
