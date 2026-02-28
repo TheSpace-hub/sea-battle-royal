@@ -34,6 +34,16 @@ public class Player {
         this.color = List.of(0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff).get(random.nextInt(0, 5));
     }
 
+    public boolean isAlive() {
+        for (int y = 0; y < field.getSizeY();  y++) {
+            for (int x = 0; x < field.getSizeX(); x++) {
+                if (field.getCell(x, y) == Field.CellType.SHIP)
+                    return true;
+            }
+        }
+        return false;
+    }
+
     public void attack(Field.Position position) {
         Set<Set<Field.Position>> ships = fieldProcessingTools.getShipsSet(field);
         if (field.getCell(position) == Field.CellType.SHIP) {
