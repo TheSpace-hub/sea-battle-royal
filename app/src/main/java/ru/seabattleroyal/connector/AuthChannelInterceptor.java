@@ -61,6 +61,23 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
                                 "uuid", player.getUuid()
                         )));
             }
+        } else if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {
+            String destination = accessor.getNativeHeader("destination").get(0).split("/")[2];
+            if (destination.split("\\.").length == 4) {
+                String gameId = destination.split("\\.")[1];
+                String uuid = destination.split("\\.")[3];
+                log.info("GameId is {}, uuid is {}", gameId, uuid);
+                Game game = repository.getGame(gameId);
+                for (Player player : game.getPlayers()) {
+                    if (player.getUuid().equals(uuid)) {
+                        if (!player.getWebSocketSessionId().equals(accessor.getSessionId()))
+                            return null;
+                        else
+                            return message;
+                    }
+                }
+            }
+
         }
         return message;
     }
