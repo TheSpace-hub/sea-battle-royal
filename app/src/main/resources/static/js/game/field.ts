@@ -161,6 +161,7 @@ export function updateFields(fields: Record<string, Record<string, Array<Array<s
             }
         }
     })
+    updateDisplay()
 }
 
 export function updateYouField(field: Array<Array<string>>) {
