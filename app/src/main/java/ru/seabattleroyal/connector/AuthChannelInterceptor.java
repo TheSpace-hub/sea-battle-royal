@@ -73,8 +73,6 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
                             return null;
                         else
                             return message;
-                    } else {
-                        return null;
                     }
                 }
             }
