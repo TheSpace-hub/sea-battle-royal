@@ -45,6 +45,7 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
                 for (Player player : game.getPlayers()) {
                     if (player.getCookieSessionUuid().equals(cookieSession)) {
                         if (player.getUsername().equals(username)) {
+                            player.setWebSocketSessionId(accessor.getSessionId());
                             messagingTemplate.convertAndSend("/topic/game." + gameId + ".reconnect", player.getUuid());
                             return message;
                         }

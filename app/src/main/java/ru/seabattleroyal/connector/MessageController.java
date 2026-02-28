@@ -50,6 +50,11 @@ public class MessageController {
         }
         messagingTemplate.convertAndSend("/topic/game." + gameId + ".information-about-players",
                 mapper.writeValueAsString(players));
+        if (game.isPlayersReady()) {
+            messagingTemplate.convertAndSend("/topic/game." + gameId + ".start", "");
+            messagingTemplate.convertAndSend("/topic/game." + gameId + ".update-fields", mapper.writeValueAsString(game.getPublicFields()));
+            messagingTemplate.convertAndSend("/topic/game." + gameId + ".move", game.getPlayers().get(game.getCurrentPlayerIndex()).getUuid());
+        }
     }
 
     @MessageMapping("/game.{gameId}.verify-field")
