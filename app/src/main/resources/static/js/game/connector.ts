@@ -115,6 +115,12 @@ class WebSocketService {
             })
         })
     }
+
+    public subscribeToPrivateFieldDestination() {
+        this.client.subscribe(`/topic/private-field.${getYouUuid()}`, (message: any) => {
+            console.log('You field is ' + message.body)
+        })
+    }
 }
 
 export function connect() {
@@ -164,8 +170,10 @@ function informationAboutPlayers(body: Record<string, string>) {
     Object.keys(body).forEach((uuid: string) => {
         const username: string = body[uuid] as string
         if (players.get(uuid) === undefined) {
-            if (username === getYouUsername())
+            if (username === getYouUsername()) {
                 setYouUuid(uuid)
+                webSocketService!.subscribeToPrivateFieldDestination()
+            }
 
             addPlayer(uuid, username)
         } else if ((players.get(uuid) as Player).username !== username) {
