@@ -139,6 +139,9 @@ public class MessageController {
                     messagingTemplate.convertAndSend("/topic/game." + gameId + ".dead", player.getUuid());
                 }
             }
+            if (game.getAlivePlayers().size() == 1) {
+                messagingTemplate.convertAndSend("/topic/game." + gameId + ".won", game.getAlivePlayers().stream().findFirst().get().getUuid());
+            }
         } catch (Game.InvalidAttackException ignored) {
             return;
         }

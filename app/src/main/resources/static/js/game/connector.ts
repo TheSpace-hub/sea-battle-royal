@@ -81,6 +81,10 @@ class WebSocketService {
                 const uuid = message.body as string
                 onPlayerDead(uuid)
             })
+            this.client.subscribe(`/topic/game.${getGameId()}.won`, (message: any) => {
+                const uuid = message.body as string
+                onPlayerWon(uuid)
+            })
             this.client.subscribe(`/topic/game.${getGameId()}.update-fields`, (message: any) => {
                 const body = JSON.parse(message.body)
                 updateFields(body)
@@ -220,6 +224,8 @@ function onPlayerMove(uuid: string) {
     players.keys().forEach((_uuid: string) => {
         const player = players.get(_uuid)
         player!.status = ((): PlayerStatus => {
+            if (players.get(_uuid)!.status == PlayerStatus.LOOSE
+                || players.get(_uuid)!.status == PlayerStatus.WON) return players.get(_uuid)!.status
             if (_uuid === uuid) return PlayerStatus.MOVE
             else return PlayerStatus.WAIT
         })()
@@ -239,5 +245,11 @@ function onPlayerAttack() {
 function onPlayerDead(uuid: string) {
     importantLog(`Капитан ${uuid} потерял весь свой флот`)
     players.get(uuid)!.status = PlayerStatus.LOOSE
+    updateStatuses()
+}
+
+function onPlayerWon(uuid: string) {
+    importantLog(`Капитан ${uuid} одержал победу`)
+    players.get(uuid)!.status = PlayerStatus.WON
     updateStatuses()
 }
