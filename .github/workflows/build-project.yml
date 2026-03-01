@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-push-docker-image:
-    name: Build executable .jar file
+    name: Build and push docker image
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
