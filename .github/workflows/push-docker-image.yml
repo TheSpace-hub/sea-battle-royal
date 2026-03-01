@@ -1,4 +1,4 @@
-name: build-project.yml
+name: push-docker-image.yml
 on:
   release:
     types:
