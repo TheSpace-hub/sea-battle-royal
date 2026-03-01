@@ -7,4 +7,4 @@ RUN java --version
 RUN ./gradlew :app:build
 CMD ["java", "-jar", "./app/build/libs/app.jar"]
 
-EXPOSE 80
+EXPOSE 8080
