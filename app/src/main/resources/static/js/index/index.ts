@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     generateListOfGames().then()
 })
 
-const WEBSOCKET_URL = 'http://localhost:8080/websocket'
+const WEBSOCKET_URL = '/websocket'
 
 class WebSocketService {
     private client: Client

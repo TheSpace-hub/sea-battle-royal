@@ -12,7 +12,7 @@ import {updateStatus} from "./status.js";
 
 let webSocketService: WebSocketService | null = null
 
-const WEBSOCKET_URL = 'http://localhost:8080/websocket'
+const WEBSOCKET_URL = '/websocket'
 let isGameStarted: boolean = false;
 
 function getCookie(name: string) {
