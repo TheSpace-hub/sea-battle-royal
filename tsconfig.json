@@ -8,6 +8,9 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "target": "ESNext",
     "types": [],
     // For nodejs:
