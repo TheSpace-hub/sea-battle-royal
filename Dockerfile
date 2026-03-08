@@ -9,4 +9,4 @@ RUN tsc
 RUN ./gradlew :app:build
 CMD ["java", "-jar", "./app/build/libs/app.jar"]
 
-EXPOSE 8080
+EXPOSE 80
