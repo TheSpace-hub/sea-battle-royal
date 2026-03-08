@@ -3,7 +3,7 @@
 # SeaBattleRoyal
 
 **Multiplayer naval battle** in real time.  
-Website: [seabattleroyal.ru](https://seabattleroyal.ru)
+Website: [seabattleroyal.ru](http://seabattleroyal.ru)
 
 ---
 
