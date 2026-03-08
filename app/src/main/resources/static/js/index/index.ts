@@ -1,8 +1,3 @@
-// @ts-ignore
-import {Client} from '@stomp/stompjs';
-// @ts-ignore
-import SockJS from 'sockjs-client'
-
 document.querySelector('#create-game')?.addEventListener('click', create_game)
 document.addEventListener("DOMContentLoaded", () => {
     generateListOfGames().then()
@@ -11,10 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
 const WEBSOCKET_URL = '/websocket'
 
 class WebSocketService {
-    private client: Client
+    // @ts-ignore
+    private client: StompJs.Client
 
     constructor() {
-        this.client = new Client({
+        // @ts-ignore
+        this.client = new StompJs.Client({
+            // @ts-ignore
             webSocketFactory: () => new SockJS(WEBSOCKET_URL),
             debug: (msg: string) => {
                 console.log(msg)
@@ -34,7 +32,7 @@ class WebSocketService {
     }
 
     public disconnect() {
-        this.client.deactivate(true).then()
+        this.client.deactivate().then()
     }
 
 }
