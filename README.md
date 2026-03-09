@@ -30,10 +30,10 @@ cd seabattleroyal
 docker build -t seabattleroyal .
 
 # Run the container
-docker run -d -p 8080:8080 --name seabattleroyal seabattleroyal
+docker run -d -p 80:80 --name seabattleroyal seabattleroyal
 ```
 
-After startup, the site will be available at `http://localhost:8080`.
+After startup, the site will be available at `http://localhost:80`.
 
 ### 2. Manual Launch (without Docker)
 
@@ -63,4 +63,4 @@ After startup, the site will be available at `http://localhost:8080`.
    java -jar ./app/build/libs/app.jar
    ```
 
-The application will start on port `8080`.
+The application will start on port `80`.
